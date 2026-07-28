@@ -103,7 +103,7 @@ class Settings(BaseSettings):
         if self.environment.lower() != "production":
             return self
         if (
-            self.jwt_secret_key == "dev-only-change-me"
+            self.jwt_secret_key == "dev-only-change-me"  # nosec B105
             or len(self.jwt_secret_key) < 32
         ):
             raise ValueError("JWT_SECRET_KEY must be configured for production.")
