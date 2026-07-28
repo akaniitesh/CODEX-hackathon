@@ -132,20 +132,22 @@ graph TD
 
 ## Demo
 
+## Demo
+
 > [!NOTE]
-> Visual demonstration artifacts and recorded media walkthroughs are available below.
+> Screenshots and a demo video will be added before the final release.
 
-### Application Shell & Repository Grid
-`![Repository List Panel](https://raw.githubusercontent.com/enterprise-org/autonomous-se-platform/main/docs/assets/repo-grid-preview.png)`
+### Planned Demonstrations
 
-### Real-Time Telemetry & Circuit Breaker Health
-`![Telemetry Analytics Panel](https://raw.githubusercontent.com/enterprise-org/autonomous-se-platform/main/docs/assets/telemetry-preview.png)`
-
-### Architecture Overview Diagram
-`![System Architecture](https://raw.githubusercontent.com/enterprise-org/autonomous-se-platform/main/docs/assets/architecture-preview.png)`
-
-### Demo Video Walkthrough
-`![Platform Walkthrough](https://raw.githubusercontent.com/enterprise-org/autonomous-se-platform/main/docs/assets/demo-video.mp4)`
+- ✅ Application Shell & Repository Grid
+- ✅ Real-Time Telemetry Dashboard
+- ✅ Architecture Overview
+- ✅ AI Agent Execution Workflow
+- ✅ Repository Analysis
+- ✅ Automated Code Review
+- ✅ Security Audit
+- ✅ Pull Request Generation
+- 🎥 Demo Video (Coming Soon)
 
 ---
 
