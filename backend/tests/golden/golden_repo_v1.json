@@ -1,0 +1,19 @@
+{
+  "repo_name": "sample-python-app",
+  "commit_sha": "abc123golden",
+  "files": {
+    "main.py": "def add(a: int, b: int) -> int:\n    return a + b\n"
+  },
+  "expected_plan_keywords": [
+    "architectural",
+    "analyzer",
+    "security"
+  ],
+  "expected_symbols": [
+    "add"
+  ],
+  "expected_test_contains": [
+    "def test_add",
+    "assert add"
+  ]
+}

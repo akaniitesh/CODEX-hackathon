@@ -1,0 +1,18 @@
+# Codeowners for Autonomous Software Engineering Platform
+
+# Global default maintainers
+*       @enterprise-org/maintainers
+
+# Backend API & AI Core
+/backend/app/ai/        @enterprise-org/ai-team
+/backend/app/agents/    @enterprise-org/agent-team
+/backend/app/api/       @enterprise-org/backend-team
+/backend/app/core/      @enterprise-org/security-team
+
+# Frontend Next.js Dashboard
+/frontend/              @enterprise-org/frontend-team
+
+# Infrastructure & CI/CD
+/.github/               @enterprise-org/devops-team
+/nginx/                 @enterprise-org/devops-team
+/docker-compose.yml     @enterprise-org/devops-team

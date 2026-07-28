@@ -1,0 +1,19 @@
+# Multi-stage production Dockerfile for Celery Worker
+FROM python:3.11-slim as builder
+
+WORKDIR /app
+RUN apt-get update && apt-get install -y --no-install-recommends gcc build-essential && rm -rf /var/lib/apt/lists/*
+
+COPY pyproject.toml .
+RUN pip install --no-cache-dir --user .
+
+FROM python:3.11-slim as runner
+WORKDIR /app
+
+COPY --from=builder /root/.local /root/.local
+COPY . /app
+
+ENV PATH=/root/.local/bin:$PATH
+ENV PYTHONUNBUFFERED=1
+
+CMD ["celery", "-A", "app.workers.celery_app", "worker", "--loglevel=info", "-Q", "runs,dead_letter"]

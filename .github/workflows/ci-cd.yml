@@ -1,0 +1,129 @@
+name: Autonomous SE Platform CI/CD Pipeline
+
+on:
+  push:
+    branches: [ main, dev ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  lint:
+    name: 1. Code Style & Linting
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Python Linters
+        run: pip install ruff black
+      - name: Run Ruff Linter
+        run: ruff check backend/app backend/tests
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Frontend Dependencies
+        working-directory: ./frontend
+        run: npm ci
+      - name: Run ESLint
+        working-directory: ./frontend
+        run: npm run lint
+
+  type-check:
+    name: 2. Static Type Check
+    needs: lint
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: |
+          pip install --upgrade pip
+          pip install .[dev]
+      - name: Run MyPy Type Checker
+        working-directory: ./backend
+        run: mypy app tests
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Build Next.js TypeScript
+        working-directory: ./frontend
+        run: |
+          npm ci
+          npm run build
+
+  test:
+    name: 3. Unit & Integration Test Suite
+    needs: type-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: |
+          pip install --upgrade pip
+          pip install .[dev]
+      - name: Run Pytest Suite
+        working-directory: ./backend
+        run: pytest -v
+
+  golden-regression-check:
+    name: 4. Golden Set Output Regression Check
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Install Dependencies
+        working-directory: ./backend
+        run: |
+          pip install --upgrade pip
+          pip install .[dev]
+      - name: Run Golden Regression Test
+        working-directory: ./backend
+        run: pytest tests/test_golden_regression.py -v
+
+  security-and-dependency-scan:
+    name: 5. Security & Vulnerability Scan
+    needs: golden-regression-check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+      - name: Run Bandit AST Security Scanner
+        run: |
+          pip install bandit
+          bandit -r backend/app
+      - name: Run npm audit
+        working-directory: ./frontend
+        run: npm audit --audit-level=high
+
+  build:
+    name: 6. Production Container Build
+    needs: security-and-dependency-scan
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Backend Docker Image
+        run: docker build -t autose-backend:latest ./backend
+      - name: Build Worker Docker Image
+        run: docker build -t autose-worker:latest -f ./backend/Dockerfile.worker ./backend
+      - name: Build Frontend Docker Image
+        run: docker build -t autose-frontend:latest ./frontend

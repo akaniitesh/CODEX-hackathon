@@ -1,0 +1,90 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: autose-postgres
+    environment:
+      POSTGRES_DB: autose_platform
+      POSTGRES_USER: autose_user
+      POSTGRES_PASSWORD: autose_password
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U autose_user -d autose_platform"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: autose-redis
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: autose-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://autose_user:autose_password@postgres:5432/autose_platform
+      - REDIS_URL=redis://redis:6379/0
+      - JWT_SECRET_KEY=local-dev-jwt-secret-change-before-production
+      - GITHUB_WEBHOOK_SECRET=local-dev-webhook-secret-change-before-production
+      - CORS_ORIGINS=http://localhost,http://localhost:3000
+      - AI_PROVIDER=groq
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/api/v1/health\")'"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+  worker:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile.worker
+    container_name: autose-worker
+    environment:
+      - DATABASE_URL=postgresql+asyncpg://autose_user:autose_password@postgres:5432/autose_platform
+      - REDIS_URL=redis://redis:6379/0
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: autose-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost/api/v1
+    depends_on:
+      - backend
+
+  nginx:
+    image: nginx:alpine
+    container_name: autose-nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - backend
+      - frontend

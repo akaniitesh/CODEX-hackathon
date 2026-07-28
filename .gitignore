@@ -1,0 +1,117 @@
+# ==============================================================================
+# Enterprise Grade .gitignore - Autonomous Software Engineering Platform
+# ==============================================================================
+
+# --- Environment Variables & Secrets ---
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.*
+!.env.example
+
+# --- Python & Virtual Environments ---
+.venv/
+venv/
+ENV/
+env/
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# --- Testing & Quality Assurance ---
+.coverage
+.coverage.*
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.hypothesis/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+.xml
+
+# --- Node.js & Next.js ---
+node_modules/
+frontend/node_modules/
+.next/
+frontend/.next/
+out/
+frontend/out/
+.nuxt/
+.vuepress/
+.serverless/
+.fusebox/
+.dynamodb/
+.yarn/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- Databases & Vector Storage ---
+*.db
+*.sqlite
+*.sqlite3
+dump.rdb
+qdrant_storage/
+chroma_db/
+pgdata/
+redisdata/
+
+# --- IDEs & Editors ---
+.vscode/
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+.idea/
+*.swp
+*.swo
+*~
+.project
+.pydevproject
+.settings/
+
+# --- OS & System Files ---
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# --- Temporary Files & Logs ---
+*.log
+logs/
+*.tmp
+*.temp
+uploads/
+scratch/
+
+# --- Documentation Preservation ---
+!docs/
+!*.md
