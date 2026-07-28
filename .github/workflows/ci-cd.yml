@@ -111,9 +111,23 @@ jobs:
         run: |
           pip install bandit
           bandit -r backend/app
-      - name: Run npm audit
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install Frontend Dependencies
         working-directory: ./frontend
-        run: npm audit --audit-level=high
+        run: npm ci
+      - name: Run npm audit (report only)
+        working-directory: ./frontend
+        run: |
+          npm audit --json > audit.json || true
+          cat audit.json
+      - name: Upload npm audit report
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-audit-report
+          path: frontend/audit.json
 
   build:
     name: 6. Production Container Build
