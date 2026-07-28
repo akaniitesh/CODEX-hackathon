@@ -9,7 +9,7 @@
 .env.test.local
 .env.production.local
 .env.*
-!.env.example
+!**/.env.example
 
 # --- Python & Virtual Environments ---
 .venv/
@@ -27,8 +27,9 @@ dist/
 downloads/
 eggs/
 .eggs/
-lib/
-lib64/
+/lib/
+/lib64/
+!**/src/lib/
 parts/
 sdist/
 var/
