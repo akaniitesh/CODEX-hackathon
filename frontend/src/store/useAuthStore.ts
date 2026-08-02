@@ -131,10 +131,11 @@ export const useAuthStore = create<AuthState>((set) => ({
         error: null,
       });
       return true;
-    } catch (err: any) {
+    } catch (err: unknown) {
+      const msg = err instanceof Error ? err.message : 'Failed to authenticate with GitHub API.';
       set({
         isLoading: false,
-        error: err.message || 'Failed to authenticate with GitHub API.',
+        error: msg,
       });
       return false;
     }

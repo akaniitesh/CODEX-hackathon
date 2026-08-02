@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { Presentation, ExternalLink, User, ChevronLeft, ChevronRight, FileText, Monitor, CheckCircle2, Shield, Cpu, Zap, Activity } from 'lucide-react';
+import { Presentation, ExternalLink, User, ChevronLeft, ChevronRight, FileText, Monitor, Shield, Cpu } from 'lucide-react';
 
 export function PresentationPanel() {
   const [currentSlide, setCurrentSlide] = useState(1);
@@ -454,7 +454,7 @@ export function PresentationPanel() {
             <span>Speaker Script — Nitesh Kumar</span>
           </div>
           <p className="text-xs text-slate-300 italic leading-relaxed">
-            "{current.notes}"
+            &quot;{current.notes}&quot;
           </p>
         </div>
 

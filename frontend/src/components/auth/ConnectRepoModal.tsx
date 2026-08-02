@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react';
 import { useRepoStore } from '@/store/useRepoStore';
-import { GitBranch, Plus, X, Loader2, CheckCircle2, AlertCircle } from 'lucide-react';
+import { GitBranch, Plus, X, Loader2, AlertCircle } from 'lucide-react';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 import { api } from '@/lib/api';
 
@@ -41,7 +41,6 @@ export function ConnectRepoModal() {
       let fetchedBranch = branch;
       let repoId = String(Math.floor(Math.random() * 900000) + 100000);
 
-      // Fetch GitHub API Repo Info if available
       try {
         const ghRes = await fetch(`https://api.github.com/repos/${parsed.owner}/${parsed.name}`);
         if (ghRes.ok) {
@@ -57,7 +56,6 @@ export function ConnectRepoModal() {
         // Fallback for private or offline repos
       }
 
-      // Try Backend Connection
       try {
         await api.connectRepository({
           owner: parsed.owner,
@@ -87,9 +85,10 @@ export function ConnectRepoModal() {
       setIsSubmitting(false);
       setRepoInput('');
       closeConnectModal();
-    } catch (err: any) {
+    } catch (err: unknown) {
       setIsSubmitting(false);
-      setError(err.message || 'Failed to connect repository.');
+      const msg = err instanceof Error ? err.message : 'Failed to connect repository.';
+      setError(msg);
     }
   };
 
@@ -117,7 +116,7 @@ export function ConnectRepoModal() {
               Connect GitHub Repository
             </h2>
             <p className="text-xs text-slate-400">
-              Import a repository to initiate autonomous multi-agent code analysis & PR generation.
+              Import a repository to initiate autonomous multi-agent code analysis &amp; PR generation.
             </p>
           </div>
         </div>
@@ -132,7 +131,7 @@ export function ConnectRepoModal() {
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-1.5">
-              GitHub Repository URL or "owner/repo"
+              GitHub Repository URL or &quot;owner/repo&quot;
             </label>
             <div className="relative">
               <GithubIcon className="absolute left-3 top-3 h-4 w-4 text-slate-500" />
@@ -187,7 +186,7 @@ export function ConnectRepoModal() {
               ) : (
                 <>
                   <Plus className="h-4 w-4" />
-                  <span>Connect & Index Repo</span>
+                  <span>Connect &amp; Index Repo</span>
                 </>
               )}
             </button>

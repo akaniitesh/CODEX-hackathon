@@ -64,6 +64,14 @@ class Settings(BaseSettings):
     groq_api_keys: list[str] = []
     groq_model: str = "llama-3.1-70b-versatile"
     groq_base_url: str = "https://api.groq.com/openai/v1"
+    anthropic_api_key: str = ""
+    anthropic_api_keys: list[str] = []
+    anthropic_model: str = "claude-3-5-sonnet-20241022"
+    anthropic_base_url: str = "https://api.anthropic.com/v1"
+    openrouter_api_key: str = ""
+    openrouter_api_keys: list[str] = []
+    openrouter_model: str = "anthropic/claude-3.5-sonnet"
+    openrouter_base_url: str = "https://openrouter.ai/api/v1"
     ollama_model: str = "llama3.1"
     ollama_base_url: str = "http://localhost:11434/v1"
     ai_circuit_failure_threshold: int = 3

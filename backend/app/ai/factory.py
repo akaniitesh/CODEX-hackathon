@@ -5,10 +5,12 @@ from app.ai.budget import TokenBudgetManager
 from app.ai.circuit_breaker import CircuitBreaker
 from app.ai.fallback import FallbackAIProvider
 from app.ai.providers import (
+    AnthropicProvider,
     GeminiProvider,
     GroqProvider,
     OllamaProvider,
     OpenAIProvider,
+    OpenRouterProvider,
 )
 from app.ai.retry import RetryPolicy
 from app.ai.retry_queue import InMemoryRetryQueue
@@ -28,12 +30,14 @@ def create_fallback_provider(
     retry_queue: InMemoryRetryQueue | None = None,
     budget_manager: TokenBudgetManager | None = None,
 ) -> FallbackAIProvider:
-    """Create resilient provider chain Gemini -> OpenAI -> Groq -> Ollama."""
+    """Create resilient provider chain Gemini -> OpenAI -> Anthropic -> Groq -> OpenRouter -> Ollama."""
     providers = _provider_map(config)
     ordered = [
         providers[ProviderName.GEMINI],
         providers[ProviderName.OPENAI],
+        providers[ProviderName.ANTHROPIC],
         providers[ProviderName.GROQ],
+        providers[ProviderName.OPENROUTER],
         providers[ProviderName.OLLAMA],
     ]
     breakers = {
@@ -68,6 +72,12 @@ def _provider_map(config: Settings) -> dict[ProviderName, BaseAIProvider]:
         [config.google_api_key] if config.google_api_key else []
     )
     gemini_model = config.gemini_model or config.model_name
+    anthropic_keys = config.anthropic_api_keys or (
+        [config.anthropic_api_key] if config.anthropic_api_key else []
+    )
+    openrouter_keys = config.openrouter_api_keys or (
+        [config.openrouter_api_key] if config.openrouter_api_key else []
+    )
     return {
         ProviderName.GEMINI: GeminiProvider(
             api_keys=gemini_keys,
@@ -84,9 +94,18 @@ def _provider_map(config: Settings) -> dict[ProviderName, BaseAIProvider]:
             model=config.openai_model,
             base_url=config.openai_base_url,
         ),
+        ProviderName.ANTHROPIC: AnthropicProvider(
+            api_keys=anthropic_keys,
+            model=config.anthropic_model,
+            base_url=config.anthropic_base_url,
+        ),
+        ProviderName.OPENROUTER: OpenRouterProvider(
+            api_keys=openrouter_keys,
+            model=config.openrouter_model,
+            base_url=config.openrouter_base_url,
+        ),
         ProviderName.OLLAMA: OllamaProvider(
             model=config.ollama_model,
             base_url=config.ollama_base_url,
         ),
     }
-

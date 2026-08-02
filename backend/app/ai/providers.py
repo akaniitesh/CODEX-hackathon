@@ -71,3 +71,38 @@ class OllamaProvider(HttpChatProvider):
             keyring=ApiKeyRing([]),
         )
 
+
+class AnthropicProvider(HttpChatProvider):
+    """Anthropic Claude OpenAI-compatible chat completions provider."""
+
+    def __init__(
+        self,
+        api_keys: list[str],
+        model: str = "claude-3-5-sonnet-20241022",
+        base_url: str = "https://api.anthropic.com/v1",
+    ) -> None:
+        super().__init__(
+            name=ProviderName.ANTHROPIC,
+            base_url=base_url,
+            default_model=model,
+            keyring=ApiKeyRing(api_keys),
+        )
+
+
+class OpenRouterProvider(HttpChatProvider):
+    """OpenRouter OpenAI-compatible chat completions provider."""
+
+    def __init__(
+        self,
+        api_keys: list[str],
+        model: str = "anthropic/claude-3.5-sonnet",
+        base_url: str = "https://openrouter.ai/api/v1",
+    ) -> None:
+        super().__init__(
+            name=ProviderName.OPENROUTER,
+            base_url=base_url,
+            default_model=model,
+            keyring=ApiKeyRing(api_keys),
+        )
+
+

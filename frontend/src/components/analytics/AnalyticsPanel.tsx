@@ -4,13 +4,9 @@ import React from 'react';
 import { useQuery } from '@tanstack/react-query';
 import {
   Activity,
-  AlertTriangle,
   CheckCircle2,
-  Cpu,
   DollarSign,
   Flame,
-  Gauge,
-  Layers,
   RefreshCw,
   ShieldCheck,
   Zap,

@@ -13,6 +13,8 @@ class ProviderName(StrEnum):
     GROQ = "groq"
     OPENAI = "openai"
     OLLAMA = "ollama"
+    ANTHROPIC = "anthropic"
+    OPENROUTER = "openrouter"
 
 
 class AIMessage(BaseModel):

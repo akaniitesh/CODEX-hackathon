@@ -4,8 +4,7 @@ import React, { useEffect, useState, Suspense } from 'react';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useAuthStore } from '@/store/useAuthStore';
 import { api } from '@/lib/api';
-import { Bot, CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
-import { GithubIcon } from '@/components/icons/GithubIcon';
+import { CheckCircle2, AlertCircle, Loader2 } from 'lucide-react';
 
 function CallbackContent() {
   const router = useRouter();
@@ -16,17 +15,17 @@ function CallbackContent() {
 
   useEffect(() => {
     const code = searchParams.get('code');
-    const state = searchParams.get('state');
 
     if (!code) {
-      setStatus('error');
-      setErrorMessage('Missing authorization code from GitHub OAuth callback.');
-      return;
+      const timer = setTimeout(() => {
+        setStatus('error');
+        setErrorMessage('Missing authorization code from GitHub OAuth callback.');
+      }, 0);
+      return () => clearTimeout(timer);
     }
 
     async function processOAuth() {
       try {
-        // Attempt backend token exchange first
         try {
           const res = await api.exchangeGitHubCode(code!);
           if (res?.access_token) {
@@ -44,10 +43,9 @@ function CallbackContent() {
             return;
           }
         } catch {
-          // Backend offline or OAuth client secret placeholder fallback
+          // Backend offline or client credentials missing
         }
 
-        // Fallback gracefully to direct authenticated state if offline
         loginWithGitHubUser({
           id: `gh-user-${code!.slice(0, 8)}`,
           login: 'authenticated_dev',
@@ -56,9 +54,10 @@ function CallbackContent() {
         });
         setStatus('success');
         setTimeout(() => router.push('/'), 1200);
-      } catch (err: any) {
+      } catch (err: unknown) {
         setStatus('error');
-        setErrorMessage(err.message || 'Failed to complete GitHub authentication.');
+        const msg = err instanceof Error ? err.message : 'Failed to complete GitHub authentication.';
+        setErrorMessage(msg);
       }
     }
 

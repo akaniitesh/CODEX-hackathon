@@ -270,7 +270,9 @@ def test_fallback_chain_order_starts_with_gemini() -> None:
     assert names == [
         ProviderName.GEMINI,
         ProviderName.OPENAI,
+        ProviderName.ANTHROPIC,
         ProviderName.GROQ,
+        ProviderName.OPENROUTER,
         ProviderName.OLLAMA,
     ]
 
