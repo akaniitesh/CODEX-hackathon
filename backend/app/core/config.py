@@ -9,7 +9,7 @@ from pydantic_settings import BaseSettings, SettingsConfigDict
 class Settings(BaseSettings):
     """Runtime configuration loaded from environment variables."""
 
-    app_name: str = "Autonomous Software Engineering Platform"
+    app_name: str = "Aegis AI"
     api_v1_prefix: str = "/api/v1"
     environment: str = Field(
         default="development",
@@ -47,17 +47,20 @@ class Settings(BaseSettings):
         "http://127.0.0.1:3000",
     ]
     analysis_cache_ttl_seconds: int = 86_400
+    debug: bool = False
     ai_provider: str = "gemini"
     google_api_key: str = ""
-    model_name: str = "gemini-1.5-flash"
+    model_name: str = "gemini-3.5-flash"
     gemini_api_keys: list[str] = []
-    gemini_model: str = "gemini-1.5-flash"
+    gemini_model: str = "gemini-3.5-flash"
     gemini_base_url: str = (
         "https://generativelanguage.googleapis.com/v1beta/openai"
     )
+    openai_api_key: str = ""
     openai_api_keys: list[str] = []
     openai_model: str = "gpt-4.1-mini"
     openai_base_url: str = "https://api.openai.com/v1"
+    groq_api_key: str = ""
     groq_api_keys: list[str] = []
     groq_model: str = "llama-3.1-70b-versatile"
     groq_base_url: str = "https://api.groq.com/openai/v1"
@@ -77,6 +80,7 @@ class Settings(BaseSettings):
         env_file_encoding="utf-8",
         case_sensitive=False,
         populate_by_name=True,
+        extra="ignore",
     )
 
     @field_validator("cors_origins", mode="before")
@@ -96,6 +100,17 @@ class Settings(BaseSettings):
         if isinstance(value, str):
             return [item.strip() for item in value.split(",") if item.strip()]
         return value
+
+    @model_validator(mode="after")
+    def initialize_api_keys(self) -> Settings:
+        """Initialize plural api key lists from singular variables if empty."""
+        if not self.openai_api_keys and self.openai_api_key:
+            self.openai_api_keys = [item.strip() for item in self.openai_api_key.split(",") if item.strip()]
+        if not self.groq_api_keys and self.groq_api_key:
+            self.groq_api_keys = [item.strip() for item in self.groq_api_key.split(",") if item.strip()]
+        if not self.gemini_api_keys and self.google_api_key:
+            self.gemini_api_keys = [item.strip() for item in self.google_api_key.split(",") if item.strip()]
+        return self
 
     @model_validator(mode="after")
     def validate_production_security(self) -> Settings:

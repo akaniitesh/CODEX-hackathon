@@ -1,4 +1,4 @@
-# Autonomous Software Engineering Platform: Troubleshooting Guide
+# Aegis AI: Troubleshooting Guide
 
 > **Target Audience**: This document is a comprehensive, searchable diagnostic guide for resolving operational, setup, database, network, AI provider, container, and security errors across the platform.
 

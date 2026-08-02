@@ -1,6 +1,6 @@
-# Autonomous Software Engineering Platform: Contributing Guide
+# Aegis AI: Contributing Guide
 
-Thank you for your interest in contributing to the **Autonomous Software Engineering Platform**! This document provides guidelines and instructions for submitting contributions to this codebase.
+Thank you for your interest in contributing to **Aegis AI**! This document provides guidelines and instructions for submitting contributions to this codebase.
 
 ---
 

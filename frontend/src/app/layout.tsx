@@ -14,8 +14,8 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: 'Autonomous Software Engineering Platform',
-  description: 'Enterprise-grade Autonomous Software Engineering Orchestration Platform',
+  title: 'Aegis AI',
+  description: 'Enterprise-grade Autonomous Software Engineering Orchestration Platform (Aegis AI)',
 };
 
 export default function RootLayout({

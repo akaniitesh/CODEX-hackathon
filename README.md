@@ -1,4 +1,4 @@
-# Autonomous Software Engineering Platform
+# Aegis AI: Autonomous Software Engineering Platform
 
 > An enterprise-grade, state-orchestrated software engineering platform that autonomously ingests GitHub repositories, constructs execution plans, reviews code, runs security audits, and manages multi-agent reasoning.
 
@@ -15,6 +15,8 @@
 
 ## 📚 Documentation
 
+- 🎤 Interactive Slide Deck (Nitesh Kumar) → [docs/PRESENTATION.html](docs/PRESENTATION.html)
+- 📝 Presentation Guide & Script → [docs/PRESENTATION_DECK.md](docs/PRESENTATION_DECK.md)
 - 📖 Installation Guide → [docs/INSTALLATION_GUIDE.md](docs/INSTALLATION_GUIDE.md)
 - 🏗 Architecture → [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
 - 🧑💻 Developer Guide → [docs/DEVELOPER_GUIDE.md](docs/DEVELOPER_GUIDE.md)
@@ -61,7 +63,7 @@
 Modern software engineering teams spend thousands of hours manually reviewing pull requests, hunting security vulnerabilities, analyzing repository architecture, writing documentation, and generating boilerplate test suites. Existing chatbot solutions lack stateful context, repository-level deterministic analysis, and multi-agent coordination.
 
 ### Mission
-The **Autonomous Software Engineering Platform** replaces ad-hoc chatbot prompts with a **state-based orchestration platform**. Connected to GitHub repositories via secure webhooks, the platform deterministically indexes repository structure, parses AST targets, executes static security scanners, and coordinates specialized AI agents using **LangGraph**.
+The **Aegis AI** platform replaces ad-hoc chatbot prompts with a **state-based orchestration platform**. Connected to GitHub repositories via secure webhooks, the platform deterministically indexes repository structure, parses AST targets, executes static security scanners, and coordinates specialized AI agents using **LangGraph**.
 
 ### Target Audience
 - **Enterprise Engineering Teams**: Automate code reviews, security audits, and documentation generation.
@@ -518,9 +520,11 @@ cp frontend/.env.example frontend/.env
 docker-compose up --build -d
 ```
 Access points:
-- **Frontend Dashboard**: `http://localhost`
+- **Frontend Dashboard (Production)**: [https://frontend-six-hazel-69.vercel.app](https://frontend-six-hazel-69.vercel.app)
+- **Frontend Dashboard (Local)**: `http://localhost`
 - **Backend Health Check**: `http://localhost/api/v1/health`
 - **Prometheus Metrics**: `http://localhost/api/v1/metrics/prometheus`
+
 
 ### Running Locally for Development
 

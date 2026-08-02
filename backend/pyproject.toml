@@ -1,7 +1,7 @@
 [project]
-name = "autonomous-se-platform-backend"
+name = "aegis-ai-backend"
 version = "0.2.0"
-description = "Backend foundation for an autonomous software engineering platform."
+description = "Aegis AI: Backend foundation for an autonomous software engineering platform."
 requires-python = ">=3.11"
 dependencies = [
   "alembic>=1.13.2",

@@ -116,3 +116,7 @@ scratch/
 # --- Documentation Preservation ---
 !docs/
 !*.md
+
+# --- Vercel ---
+.vercel/
+.vercel

@@ -1,7 +1,7 @@
 # Production Deployment & Operations Runbook
 
 ## Overview
-This runbook describes the deployment, configuration, local orchestration, and telemetry monitoring for the Autonomous Software Engineering Platform.
+This runbook describes the deployment, configuration, local orchestration, and telemetry monitoring for **Aegis AI**.
 
 ---
 
@@ -70,3 +70,22 @@ The GitHub Actions workflow (`.github/workflows/ci-cd.yml`) enforces 6 mandatory
 - **Prometheus**: Exposed at `/api/v1/metrics/prometheus`.
 - **Telemetry Dashboard**: Exposed at `/api/v1/telemetry/health` and rendered dynamically in the frontend **Cost & Model Health** panel.
 - **Circuit Breakers**: Live status monitored across Gemini, OpenAI, Groq, and Ollama providers with automatic cooldown probes.
+
+---
+
+## 5. Frontend Production Deployment (Vercel)
+
+The Next.js frontend is deployed live on Vercel:
+- **Production Dashboard**: [https://frontend-six-hazel-69.vercel.app](https://frontend-six-hazel-69.vercel.app)
+- **Deployment URL**: [https://frontend-lgqd6yilk-akaniiteshs-projects.vercel.app](https://frontend-lgqd6yilk-akaniiteshs-projects.vercel.app)
+
+### Local CLI Deployments
+Any subsequent updates can be deployed directly from the `frontend/` directory if you have an active session logged in:
+```bash
+cd frontend
+# Deploy preview
+npx vercel
+# Deploy production
+npx vercel --prod
+```
+

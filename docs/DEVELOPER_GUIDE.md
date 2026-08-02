@@ -1,4 +1,4 @@
-# Autonomous Software Engineering Platform: Developer Guide
+# Aegis AI: Developer Guide
 
 > **Target Audience**: This guide is written for software engineers joining the project. It provides an exhaustive, end-to-end technical walkthrough of the codebase architecture, request lifecycles, data flows, extension patterns, and step-by-step developer workflows.
 

@@ -17,6 +17,7 @@ import {
   ShieldAlert,
   Terminal,
   Zap,
+  Presentation,
 } from 'lucide-react';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 
@@ -31,6 +32,7 @@ export function Navbar() {
     { id: 'reviews', label: 'Reviews & Findings', icon: ShieldAlert },
     { id: 'architecture', label: 'Architecture', icon: Cpu },
     { id: 'analytics', label: 'Cost & Health', icon: Zap },
+    { id: 'presentation', label: 'Presentation Deck', icon: Presentation },
   ] as const;
 
   return (

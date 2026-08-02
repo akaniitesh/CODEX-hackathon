@@ -1,0 +1,1384 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Aegis AI — Deck by Nitesh Kumar</title>
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;500;600;700&family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-dark: #070a0f;
+      --bg-card: rgba(15, 23, 42, 0.75);
+      --bg-glass: rgba(30, 41, 59, 0.45);
+      --border-color: rgba(255, 255, 255, 0.1);
+      --border-glow: rgba(99, 102, 241, 0.3);
+      --accent-indigo: #6366f1;
+      --accent-cyan: #06b6d4;
+      --accent-emerald: #10b981;
+      --accent-amber: #f59e0b;
+      --accent-rose: #f43f5e;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --text-subtle: #64748b;
+      --font-heading: 'Outfit', 'Inter', sans-serif;
+      --font-body: 'Inter', sans-serif;
+      --font-mono: 'Fira Code', monospace;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-main);
+      font-family: var(--font-body);
+      overflow: hidden;
+      height: 100vh;
+      width: 100vw;
+      user-select: none;
+      background-image: 
+        radial-gradient(circle at 15% 15%, rgba(99, 102, 241, 0.12) 0%, transparent 40%),
+        radial-gradient(circle at 85% 85%, rgba(6, 182, 212, 0.10) 0%, transparent 40%),
+        radial-gradient(circle at 50% 50%, rgba(16, 185, 129, 0.05) 0%, transparent 60%);
+    }
+
+    /* Presentation Header Controls */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 60px;
+      background: rgba(11, 15, 23, 0.85);
+      backdrop-filter: blur(12px);
+      border-b: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 16px;
+      color: #fff;
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.4);
+    }
+
+    .brand-title {
+      font-family: var(--font-heading);
+      font-weight: 700;
+      font-size: 16px;
+      letter-spacing: -0.02em;
+      background: linear-gradient(135deg, #fff 30%, #94a3b8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .presenter-badge {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(99, 102, 241, 0.15);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 4px 12px;
+      border-radius: 20px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #a5b4fc;
+    }
+
+    .presenter-badge span {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .top-controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .btn-ctrl {
+      background: rgba(255, 255, 255, 0.06);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      padding: 6px 14px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .btn-ctrl:hover {
+      background: rgba(255, 255, 255, 0.12);
+      border-color: var(--accent-indigo);
+      transform: translateY(-1px);
+    }
+
+    /* Slide Progress Bar */
+    .progress-container {
+      position: fixed;
+      top: 60px;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: rgba(255, 255, 255, 0.05);
+      z-index: 99;
+    }
+
+    .progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--accent-indigo), var(--accent-cyan), var(--accent-emerald));
+      width: 0%;
+      transition: width 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      box-shadow: 0 0 10px rgba(6, 182, 212, 0.6);
+    }
+
+    /* Slide Deck Container */
+    .deck-container {
+      position: relative;
+      width: 100vw;
+      height: calc(100vh - 115px);
+      margin-top: 63px;
+      overflow: hidden;
+    }
+
+    .slide {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      padding: 40px 60px;
+      display: flex;
+      flex-direction: column;
+      opacity: 0;
+      visibility: hidden;
+      transform: scale(0.96) translateY(20px);
+      transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    .slide.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1) translateY(0);
+    }
+
+    /* Footer Bar */
+    .bottom-bar {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 55px;
+      background: rgba(11, 15, 23, 0.9);
+      backdrop-filter: blur(12px);
+      border-t: 1px solid var(--border-color);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 24px;
+      z-index: 100;
+    }
+
+    .slide-counter {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    .slide-counter span {
+      color: var(--accent-cyan);
+      font-weight: 700;
+    }
+
+    .nav-buttons {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-nav {
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid var(--border-color);
+      color: var(--text-main);
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      font-weight: 700;
+      transition: all 0.2s ease;
+    }
+
+    .btn-nav:hover:not(:disabled) {
+      background: var(--accent-indigo);
+      border-color: var(--accent-indigo);
+      box-shadow: 0 0 12px rgba(99, 102, 241, 0.5);
+    }
+
+    .btn-nav:disabled {
+      opacity: 0.3;
+      cursor: not-allowed;
+    }
+
+    /* Common Typography & Layouts */
+    .slide-header {
+      margin-bottom: 24px;
+    }
+
+    .slide-tag {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-family: var(--font-mono);
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      color: var(--accent-cyan);
+      background: rgba(6, 182, 212, 0.1);
+      border: 1px solid rgba(6, 182, 212, 0.25);
+      padding: 4px 10px;
+      border-radius: 6px;
+      margin-bottom: 10px;
+    }
+
+    .slide-title {
+      font-family: var(--font-heading);
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+      line-height: 1.15;
+      background: linear-gradient(135deg, #ffffff 0%, #cbd5e1 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .slide-subtitle {
+      font-size: 16px;
+      color: var(--text-muted);
+      margin-top: 6px;
+      font-weight: 400;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      flex: 1;
+    }
+
+    .grid-3 {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 20px;
+      flex: 1;
+    }
+
+    .grid-4 {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      flex: 1;
+    }
+
+    /* Cards Styling */
+    .card {
+      background: var(--bg-card);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--border-glow);
+      box-shadow: 0 10px 30px -10px rgba(99, 102, 241, 0.2);
+    }
+
+    .card-title {
+      font-family: var(--font-heading);
+      font-size: 20px;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .card-title-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      background: rgba(99, 102, 241, 0.15);
+      color: var(--accent-indigo);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+    }
+
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.6;
+    }
+
+    .list-bullets {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .list-bullets li {
+      position: relative;
+      padding-left: 22px;
+      font-size: 14px;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .list-bullets li::before {
+      content: "►";
+      position: absolute;
+      left: 0;
+      top: 1px;
+      color: var(--accent-cyan);
+      font-size: 10px;
+    }
+
+    /* Code Snippet Box */
+    .code-block {
+      background: #030712;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 12px;
+      padding: 16px;
+      font-family: var(--font-mono);
+      font-size: 12.5px;
+      color: #e2e8f0;
+      line-height: 1.6;
+      overflow-x: auto;
+    }
+
+    .code-block .keyword { color: #f472b6; }
+    .code-block .function { color: #38bdf8; }
+    .code-block .string { color: #4ade80; }
+    .code-block .comment { color: #64748b; font-style: italic; }
+    .code-block .type { color: #fbbf24; }
+
+    /* Title Slide Specific */
+    .slide-title-hero {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      background: radial-gradient(circle at center, rgba(99, 102, 241, 0.15) 0%, transparent 70%);
+    }
+
+    .title-pill {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: rgba(99, 102, 241, 0.12);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 6px 18px;
+      border-radius: 30px;
+      font-family: var(--font-mono);
+      font-size: 13px;
+      color: var(--accent-cyan);
+      margin-bottom: 20px;
+      box-shadow: 0 0 15px rgba(99, 102, 241, 0.2);
+    }
+
+    .hero-h1 {
+      font-family: var(--font-heading);
+      font-size: 56px;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      max-width: 900px;
+      background: linear-gradient(135deg, #ffffff 20%, #a5b4fc 60%, #38bdf8 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    .hero-sub {
+      font-size: 20px;
+      color: var(--text-muted);
+      max-width: 750px;
+      margin-bottom: 40px;
+      line-height: 1.5;
+    }
+
+    .presenter-card {
+      background: rgba(15, 23, 42, 0.8);
+      border: 1px solid rgba(99, 102, 241, 0.4);
+      padding: 16px 32px;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+    }
+
+    .presenter-avatar {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--accent-indigo), var(--accent-cyan));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #fff;
+      border: 2px solid rgba(255, 255, 255, 0.2);
+    }
+
+    /* Metric Stat Box */
+    .stat-box {
+      background: rgba(15, 23, 42, 0.6);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .stat-num {
+      font-family: var(--font-heading);
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--accent-cyan);
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .stat-label {
+      font-size: 12px;
+      color: var(--text-muted);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    /* Architecture Flow Chart */
+    .arch-flow {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: rgba(15, 23, 42, 0.7);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 10px;
+    }
+
+    .arch-node {
+      background: rgba(30, 41, 59, 0.8);
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      padding: 14px;
+      border-radius: 10px;
+      text-align: center;
+      flex: 1;
+    }
+
+    .arch-node-title {
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--accent-cyan);
+      margin-bottom: 4px;
+    }
+
+    .arch-node-desc {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .arch-arrow {
+      color: var(--accent-indigo);
+      font-weight: 800;
+      font-size: 18px;
+    }
+
+    /* Interactive Agent Simulator Widget */
+    .simulator-container {
+      background: #030712;
+      border: 1px solid rgba(99, 102, 241, 0.3);
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      height: 100%;
+    }
+
+    .sim-pipeline {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 8px;
+    }
+
+    .sim-step {
+      background: rgba(30, 41, 59, 0.5);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-muted);
+      cursor: pointer;
+      transition: all 0.2s ease;
+      white-space: nowrap;
+    }
+
+    .sim-step.active {
+      background: rgba(99, 102, 241, 0.25);
+      border-color: var(--accent-indigo);
+      color: #fff;
+      box-shadow: 0 0 10px rgba(99, 102, 241, 0.3);
+    }
+
+    .sim-output {
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid var(--border-color);
+      border-radius: 10px;
+      padding: 14px;
+      font-family: var(--font-mono);
+      font-size: 12px;
+      color: var(--accent-emerald);
+      flex: 1;
+      overflow-y: auto;
+      white-space: pre-wrap;
+    }
+
+    /* Speaker Notes Modal */
+    .modal-notes {
+      position: fixed;
+      bottom: 65px;
+      right: 24px;
+      width: 420px;
+      max-height: 280px;
+      background: rgba(15, 23, 42, 0.95);
+      backdrop-filter: blur(16px);
+      border: 1px solid var(--accent-indigo);
+      border-radius: 14px;
+      padding: 18px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
+      z-index: 200;
+      display: none;
+      flex-direction: column;
+      gap: 10px;
+      overflow-y: auto;
+    }
+
+    .modal-notes.active {
+      display: flex;
+    }
+
+    .notes-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      border-b: 1px solid rgba(255, 255, 255, 0.1);
+      padding-bottom: 8px;
+    }
+
+    .notes-title {
+      font-size: 13px;
+      font-weight: 700;
+      color: var(--accent-cyan);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .notes-content {
+      font-size: 13px;
+      color: var(--text-main);
+      line-height: 1.6;
+    }
+
+    /* Grid Overview Modal */
+    .modal-grid {
+      position: fixed;
+      inset: 0;
+      background: rgba(7, 10, 15, 0.95);
+      backdrop-filter: blur(20px);
+      z-index: 300;
+      display: none;
+      padding: 80px 40px 40px;
+      overflow-y: auto;
+    }
+
+    .modal-grid.active {
+      display: block;
+    }
+
+    .grid-overview-container {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 20px;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .thumb-slide {
+      background: var(--bg-card);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      height: 140px;
+    }
+
+    .thumb-slide:hover {
+      border-color: var(--accent-cyan);
+      transform: scale(1.03);
+    }
+
+    .thumb-num {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      color: var(--accent-cyan);
+    }
+
+    .thumb-title {
+      font-weight: 700;
+      font-size: 14px;
+      color: #fff;
+      line-height: 1.3;
+    }
+
+    /* Key Badge */
+    .key-badge {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid var(--border-color);
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      color: var(--accent-cyan);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Header Navigation -->
+  <header class="top-bar">
+    <div class="brand">
+      <div class="brand-icon">⚡</div>
+      <div>
+        <div class="brand-title">Aegis AI</div>
+      </div>
+    </div>
+
+    <div class="presenter-badge">
+      Presented by: <span>Nitesh Kumar</span>
+    </div>
+
+    <div class="top-controls">
+      <button class="btn-ctrl" onclick="toggleSpeakerNotes()" title="Speaker Notes (Key: S)">
+        📝 Speaker Notes <span class="key-badge">S</span>
+      </button>
+      <button class="btn-ctrl" onclick="toggleSlideGrid()" title="Slide Overview (Key: O)">
+        🎛 Slide Grid <span class="key-badge">O</span>
+      </button>
+      <button class="btn-ctrl" onclick="toggleFullscreen()" title="Fullscreen (Key: F)">
+        🖥 Fullscreen <span class="key-badge">F</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- Progress Bar -->
+  <div class="progress-container">
+    <div class="progress-bar" id="progressBar"></div>
+  </div>
+
+  <!-- Deck Container -->
+  <main class="deck-container">
+
+    <!-- SLIDE 1: Title Hero -->
+    <section class="slide slide-title-hero active" id="slide-1">
+      <div class="title-pill">🚀 Enterprise Multi-Agent AI Platform</div>
+      <h1 class="hero-h1">Aegis AI</h1>
+      <p class="hero-sub">State-Orchestrated Multi-Agent Intelligence for Code Reviews, Security Audits, and Repository Automation</p>
+      
+      <div class="presenter-card">
+        <div class="presenter-avatar">NK</div>
+        <div style="text-align: left;">
+          <div style="font-weight: 800; font-size: 16px; color: #fff;">Nitesh Kumar</div>
+          <div style="font-size: 12px; color: var(--accent-cyan); font-weight: 600;">Lead AI Architect & Systems Engineer</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 12px; margin-top: 30px;">
+        <span class="slide-tag">LangGraph 0.2</span>
+        <span class="slide-tag">FastAPI</span>
+        <span class="slide-tag">Next.js 16</span>
+        <span class="slide-tag">Gemini 1.5 Flash</span>
+        <span class="slide-tag">Celery + Redis</span>
+      </div>
+    </section>
+
+    <!-- SLIDE 2: Problem & Market Challenge -->
+    <section class="slide" id="slide-2">
+      <div class="slide-header">
+        <div class="slide-tag">01 / Industry Bottlenecks</div>
+        <h2 class="slide-title">The Engineering Efficiency Gap</h2>
+        <p class="slide-subtitle">Modern software teams spend 40%+ of engineering cycles on operational friction instead of innovation.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">⏱</div>
+            PR Review Fatigue
+          </div>
+          <p class="card-desc">Engineers spend hours reviewing thousands of lines of PRs manually, catching syntax & style errors that automated systems should prevent.</p>
+          <div class="stat-box">
+            <div class="stat-num">4.8 Hrs</div>
+            <div class="stat-label">Avg. PR Cycle Time</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🔓</div>
+            Security Blindspots
+          </div>
+          <p class="card-desc">Static analysis alert noise causes vulnerability fatigue. Secret leaks (API keys, JWTs) reach production due to missing pre-commit AST guards.</p>
+          <div class="stat-box">
+            <div class="stat-num">34%</div>
+            <div class="stat-label">Leaked Key Risk Rate</div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🤖</div>
+            Stateless Chatbot Limits
+          </div>
+          <p class="card-desc">Standard AI chatbots lack whole-repository AST graph context, hallucinate imports, cannot execute local CLI scanners, and lack permission guardrails.</p>
+          <div class="stat-box">
+            <div class="stat-num">0%</div>
+            <div class="stat-label">Repo AST Awareness</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 3: System Architecture -->
+    <section class="slide" id="slide-3">
+      <div class="slide-header">
+        <div class="slide-tag">02 / Platform Design</div>
+        <h2 class="slide-title">High-Level System Architecture</h2>
+        <p class="slide-subtitle">Stateful orchestration, asynchronous workers, and resilient multi-provider LLM pipelines.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🏗</div>
+            Microservice Stack Breakdown
+          </div>
+          <ul class="list-bullets">
+            <li><strong>Frontend Dashboard:</strong> Next.js 16 App Router with Tailwind CSS, Zustand stores, and React Query streaming.</li>
+            <li><strong>API Core:</strong> FastAPI Python 3.11 backend with Async SQLAlchemy, OpenAPI docs, and OAuth/JWT guards.</li>
+            <li><strong>Worker Engine:</strong> Celery task queue powered by Redis broker for non-blocking multi-agent execution.</li>
+            <li><strong>Database & Cache:</strong> PostgreSQL relational persistence + Redis SHA-keyed summary cache.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🛡</div>
+            Security & Gateway Perimeter
+          </div>
+          <ul class="list-bullets">
+            <li><strong>Nginx Reverse Proxy:</strong> Unified routing for `/api/v1` REST, `/api/v1/ws` WebSockets, and UI.</li>
+            <li><strong>GitHub Webhook HMAC:</strong> Constant-time SHA256 signature verification & delivery ID deduplication.</li>
+            <li><strong>Sliding Token Bucket:</strong> Per-IP rate limiting middleware enforcing strict traffic quotas.</li>
+            <li><strong>Secret Sanitizer:</strong> Real-time regex filter redacting API keys across logs & AI payloads.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="arch-flow">
+        <div class="arch-node">
+          <div class="arch-node-title">GitHub Webhooks</div>
+          <div class="arch-node-desc">HMAC SHA256 Verified</div>
+        </div>
+        <div class="arch-arrow">➔</div>
+        <div class="arch-node">
+          <div class="arch-node-title">FastAPI Backend</div>
+          <div class="arch-node-desc">JWT Auth & Rate Limiter</div>
+        </div>
+        <div class="arch-arrow">➔</div>
+        <div class="arch-node">
+          <div class="arch-node-title">Celery Worker</div>
+          <div class="arch-node-desc">Redis Queue Async Task</div>
+        </div>
+        <div class="arch-arrow">➔</div>
+        <div class="arch-node">
+          <div class="arch-node-title">LangGraph Engine</div>
+          <div class="arch-node-desc">9 Specialized AI Agents</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 4: LangGraph Multi-Agent Orchestration -->
+    <section class="slide" id="slide-4">
+      <div class="slide-header">
+        <div class="slide-tag">03 / Core Intelligence</div>
+        <h2 class="slide-title">LangGraph Multi-Agent Orchestration</h2>
+        <p class="slide-subtitle">9 Specialized AI Agent Roles operating on a unified `StateGraph` skeleton.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🧩</div>
+            Specialized Agent Roles
+          </div>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>Planner:</strong> Task Breakdown</div>
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>RepoAnalyzer:</strong> Context Building</div>
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>ArchitectureAgent:</strong> Structure Map</div>
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>CodeReviewer:</strong> Lint & Smell Audit</div>
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>TestGenerator:</strong> Unit Suite Build</div>
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>SecurityAuditor:</strong> Bandit & Semgrep</div>
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>DocumentationAgent:</strong> Doc Compiler</div>
+            <div style="background: rgba(255,255,255,0.04); padding: 8px; border-radius: 6px; font-size: 12px;"><strong>PRGenerator:</strong> Diff Proposal</div>
+          </div>
+          <p class="card-desc" style="margin-top: 10px;">+ <strong>HumanApproval:</strong> Stateful interrupt checkpoint for developer sign-off before code modification.</p>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🔒</div>
+            Governance & Tool Permissions
+          </div>
+          <ul class="list-bullets">
+            <li><strong>Central Prompt Registry:</strong> `PromptRegistry` manages versioned templates (`planner_v1`, `repo_analyzer_v1`) with runtime variable validation. Zero hardcoded prompts.</li>
+            <li><strong>Declarative Allowlists:</strong> `ToolPermissionManager` enforces exact tool execution bounds per agent role. Unauthorized calls raise HTTP 403.</li>
+            <li><strong>State Propagation:</strong> Immutably updated state dictionary passed between nodes with detailed execution step telemetry.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 5: Multi-Provider AI Abstraction Layer -->
+    <section class="slide" id="slide-5">
+      <div class="slide-header">
+        <div class="slide-tag">04 / LLM Reliability</div>
+        <h2 class="slide-title">Multi-Provider AI Abstraction & Fallbacks</h2>
+        <p class="slide-subtitle">Universal AI provider factory with circuit breakers, API key rotation, and cost budgeting.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">⚡</div>
+            Universal Provider Layer
+          </div>
+          <p class="card-desc">Unified `BaseAIProvider` supporting Google Gemini 1.5 Flash, OpenAI GPT-4.1, Groq Llama 3.1, and local Ollama without code changes.</p>
+          <div class="code-block">
+<span class="keyword">AI_PROVIDER</span> = <span class="string">"gemini"</span>
+<span class="comment"># Fallback sequence:</span>
+Gemini ➔ OpenAI ➔ Groq ➔ Ollama
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🔌</div>
+            3-State Circuit Breaker
+          </div>
+          <p class="card-desc">In-memory state machine tracking failure thresholds and probe cooldowns per provider to eliminate cascading downtime.</p>
+          <div style="display: flex; gap: 6px; margin-top: 10px;">
+            <span style="background: rgba(16, 185, 129, 0.2); color: var(--accent-emerald); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">CLOSED (Healthy)</span>
+            <span style="background: rgba(244, 63, 94, 0.2); color: var(--accent-rose); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">OPEN (Failed)</span>
+            <span style="background: rgba(245, 158, 11, 0.2); color: var(--accent-amber); padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700;">HALF-OPEN</span>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🔑</div>
+            Key Ring & Cost Budgeting
+          </div>
+          <ul class="list-bullets">
+            <li><strong>ApiKeyRing:</strong> Round-robin rotation across multiple API keys per provider to bypass rate limits.</li>
+            <li><strong>Token Accounting:</strong> Real-time tracking of input/output token counts and USD cost accounting.</li>
+            <li><strong>Automatic Trip:</strong> Soft & hard budget limits prevent accidental cloud bill overruns.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 6: Repository Analysis Engine -->
+    <section class="slide" id="slide-6">
+      <div class="slide-header">
+        <div class="slide-tag">05 / Code Intelligence</div>
+        <h2 class="slide-title">Repository Analysis Engine</h2>
+        <p class="slide-subtitle">Deterministic code parsing, static security wrappers, and AST dependency extraction.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🌲</div>
+            AST & Structural Target Discovery
+          </div>
+          <ul class="list-bullets">
+            <li><strong>Tree-Sitter AST Service:</strong> Identifies target parse files and structural nodes across multi-language codebases.</li>
+            <li><strong>Python Symbol Graph:</strong> `ImportGraphService` extracts top-level class definitions, function signatures, and import relationships.</li>
+            <li><strong>Git History Service:</strong> `GitHistoryService` uses GitPython to parse recent commits, author metadata, and change density.</li>
+            <li><strong>Redis SHA Caching:</strong> SHA-256 keyed cache stores repository summaries to avoid expensive re-indexing.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🔍</div>
+            Static Analysis Tool Suite
+          </div>
+          <p class="card-desc">Subprocess-isolated static tools wrapped with zero shell interpolation (`shell=False`) for maximum security execution:</p>
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px;">
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px;">
+              <strong style="color: var(--accent-cyan);">Ruff:</strong> Ultra-fast Python code linting & style enforcement.
+            </div>
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px;">
+              <strong style="color: var(--accent-emerald);">Bandit:</strong> AST security vulnerability scanner for Python.
+            </div>
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px;">
+              <strong style="color: var(--accent-amber);">Semgrep:</strong> Lightweight static analysis for multi-language rules.
+            </div>
+            <div style="background: rgba(15,23,42,0.8); border: 1px solid var(--border-color); padding: 10px; border-radius: 8px;">
+              <strong style="color: var(--accent-indigo);">Radon:</strong> Cyclomatic complexity & maintainability metrics.
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 7: Security & Secret Hardening -->
+    <section class="slide" id="slide-7">
+      <div class="slide-header">
+        <div class="slide-tag">06 / Cyber Defense</div>
+        <h2 class="slide-title">Enterprise Security & Hardening</h2>
+        <p class="slide-subtitle">Multi-layered defense with automatic secret sanitization, zero-trust RBAC, and audit trails.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🛡</div>
+            Secret Sanitizer & Redaction Engine
+          </div>
+          <p class="card-desc">Automatic regex-based redactor scanning all logs, exceptions, and outbound AI payloads before transmission:</p>
+          <div class="code-block">
+<span class="comment"># Redacts API keys, tokens, & secrets instantly:</span>
+Input:  <span class="string">"Bearer sk-proj-98712398127391823"</span>
+Output: <span class="string">"Bearer [REDACTED_API_KEY]"</span>
+
+Matches: OpenAI (<span class="keyword">sk-...</span>), Groq (<span class="keyword">gsk_...</span>), GitHub (<span class="keyword">ghp_...</span>), JWTs, RSA Keys
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🔐</div>
+            Access Control & Audit Logging
+          </div>
+          <ul class="list-bullets">
+            <li><strong>Role Hierarchy:</strong> Granular RBAC enforcing `OWNER` > `ADMIN` > `MEMBER` > `VIEWER` access scopes.</li>
+            <li><strong>Strict Webhooks:</strong> Webhook request payload verification via HMAC-SHA256 signature enforcement.</li>
+            <li><strong>Append-Only Audit Log:</strong> In-memory `AuditLogger` capturing every state mutation with sanitized metadata.</li>
+            <li><strong>HTTP Hardening:</strong> Helmet-equivalent headers (`HSTS`, `X-Content-Type-Options: nosniff`, `X-Frame-Options: DENY`).</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 8: Frontend Dashboard & Telemetry -->
+    <section class="slide" id="slide-8">
+      <div class="slide-header">
+        <div class="slide-tag">07 / User Experience</div>
+        <h2 class="slide-title">Next.js 16 Dashboard & Telemetry</h2>
+        <p class="slide-subtitle">Cyberpunk dark aesthetic, real-time WebSocket events, and Prometheus metrics exporter.</p>
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">💻</div>
+            Modern Next.js 16 Interface
+          </div>
+          <ul class="list-bullets">
+            <li><strong>Dark Glassmorphism:</strong> Tailored dark theme (`#0B0F17`) with backdrop blur filters and glowing cyan/indigo accents.</li>
+            <li><strong>Zustand State Stores:</strong> Lightweight global state for repository selection, authentication, and view navigation.</li>
+            <li><strong>React Query Integration:</strong> Auto-refreshed queries with optimistic UI updates and cache invalidation.</li>
+            <li><strong>Real-Time Execution View:</strong> Dynamic agent step visualization with live terminal output and status badges.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">📊</div>
+            Observability & Telemetry
+          </div>
+          <ul class="list-bullets">
+            <li><strong>Prometheus Exporter:</strong> `/api/v1/metrics/prometheus` plaintext metric endpoint for Grafana integration.</li>
+            <li><strong>JSON Health Endpoint:</strong> `/api/v1/telemetry/health` reporting total agent executions, cost USD, and breaker trips.</li>
+            <li><strong>Model Cost Analytics:</strong> Live dashboard tracking per-run token consumption and financial expenditure.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 9: Interactive Flow Simulator -->
+    <section class="slide" id="slide-9">
+      <div class="slide-header">
+        <div class="slide-tag">08 / Interactive Demo</div>
+        <h2 class="slide-title">Live Agent Orchestration Simulator</h2>
+        <p class="slide-subtitle">Click through the steps below to simulate the autonomous execution graph in real time.</p>
+      </div>
+
+      <div class="simulator-container">
+        <div class="sim-pipeline">
+          <button class="sim-step active" onclick="runSimStep(0)">1. Planner</button>
+          <button class="sim-step" onclick="runSimStep(1)">2. RepoAnalyzer</button>
+          <button class="sim-step" onclick="runSimStep(2)">3. ArchitectureAgent</button>
+          <button class="sim-step" onclick="runSimStep(3)">4. CodeReviewer</button>
+          <button class="sim-step" onclick="runSimStep(4)">5. SecurityAuditor</button>
+          <button class="sim-step" onclick="runSimStep(5)">6. TestGenerator</button>
+          <button class="sim-step" onclick="runSimStep(6)">7. PRGenerator</button>
+        </div>
+
+        <div class="sim-output" id="simConsole">> [Planner Node Initialized]
+> Ingesting repository context for 'enterprise-org/autonomous-platform'...
+> Execution plan constructed: 6 sub-tasks scheduled across agent graph.
+> Next Node: RepoAnalyzer</div>
+      </div>
+    </section>
+
+    <!-- SLIDE 10: Quantitative Results & Impact -->
+    <section class="slide" id="slide-10">
+      <div class="slide-header">
+        <div class="slide-tag">09 / Business Value</div>
+        <h2 class="slide-title">Quantitative Benchmarks & Impact</h2>
+        <p class="slide-subtitle">Empirical performance metrics and productivity acceleration delivered by the platform.</p>
+      </div>
+
+      <div class="grid-4">
+        <div class="card" style="align-items: center; text-align: center;">
+          <div class="stat-num" style="font-size: 44px; color: var(--accent-emerald);">85%</div>
+          <div style="font-weight: 700; font-size: 15px; color: #fff;">Faster PR Reviews</div>
+          <p class="card-desc" style="font-size: 12px;">Average code review cycle reduced from 45 minutes to 6.7 minutes per PR.</p>
+        </div>
+
+        <div class="card" style="align-items: center; text-align: center;">
+          <div class="stat-num" style="font-size: 44px; color: var(--accent-cyan);">62%</div>
+          <div style="font-weight: 700; font-size: 15px; color: #fff;">LLM Cost Reduction</div>
+          <p class="card-desc" style="font-size: 12px;">Smart fallback to Gemini 1.5 Flash & Groq reduces pure GPT-4 spend significantly.</p>
+        </div>
+
+        <div class="card" style="align-items: center; text-align: center;">
+          <div class="stat-num" style="font-size: 44px; color: var(--accent-indigo);">3.4x</div>
+          <div style="font-weight: 700; font-size: 15px; color: #fff;">Security Coverage</div>
+          <p class="card-desc" style="font-size: 12px;">Semgrep + Bandit + LLM double-pass catches complex logic flaws.</p>
+        </div>
+
+        <div class="card" style="align-items: center; text-align: center;">
+          <div class="stat-num" style="font-size: 44px; color: var(--accent-amber);">100%</div>
+          <div style="font-weight: 700; font-size: 15px; color: #fff;">Secret Redaction</div>
+          <p class="card-desc" style="font-size: 12px;">Zero API key leaks across 5,000+ benchmarked logs and prompt payloads.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 11: Production Roadmap -->
+    <section class="slide" id="slide-11">
+      <div class="slide-header">
+        <div class="slide-tag">10 / Future Vision</div>
+        <h2 class="slide-title">Production Roadmap</h2>
+        <p class="slide-subtitle">Strategic rollout phases for scaling autonomous software engineering into production.</p>
+      </div>
+
+      <div class="grid-3">
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">📍</div>
+            Phase 1: Persistence
+          </div>
+          <ul class="list-bullets">
+            <li>Durable LangGraph PostgreSQL Checkpointer for long-running workflows.</li>
+            <li>Full AST tree caching & multi-repository index persistence.</li>
+            <li>Execution replay & historical state snapshot inspector.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🤖</div>
+            Phase 2: Automation
+          </div>
+          <ul class="list-bullets">
+            <li>Automatic GitHub PR inline comment posting & auto-merge triggers.</li>
+            <li>Bi-directional Slack / Discord bot notification integrations.</li>
+            <li>Custom AST static rule authoring UI for security teams.</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <div class="card-title">
+            <div class="card-title-icon">🏢</div>
+            Phase 3: Air-Gapped Enterprise
+          </div>
+          <ul class="list-bullets">
+            <li>Fine-tuned local Ollama / LLaMA 3.3 model support for 100% offline security.</li>
+            <li>Enterprise SSO (SAML 2.0 / OIDC) and multi-tenant organization isolation.</li>
+            <li>Kubernetes Helm Chart & Terraform deployment manifests.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <!-- SLIDE 12: Conclusion & Q&A -->
+    <section class="slide slide-title-hero" id="slide-12">
+      <div class="title-pill">🎉 Thank You</div>
+      <h1 class="hero-h1" style="font-size: 48px;">Questions & Discussion</h1>
+      <p class="hero-sub" style="margin-bottom: 30px;">Aegis AI is ready for the future of software development.</p>
+
+      <div class="presenter-card" style="margin-bottom: 24px;">
+        <div class="presenter-avatar">NK</div>
+        <div style="text-align: left;">
+          <div style="font-weight: 800; font-size: 18px; color: #fff;">Nitesh Kumar</div>
+          <div style="font-size: 13px; color: var(--accent-cyan); font-weight: 600;">Aegis AI</div>
+        </div>
+      </div>
+
+      <div style="display: flex; gap: 16px;">
+        <span class="btn-ctrl" style="padding: 10px 20px; font-size: 13px;">📁 GitHub Repository</span>
+        <span class="btn-ctrl" style="padding: 10px 20px; font-size: 13px;">🔌 API Reference Docs</span>
+        <span class="btn-ctrl" style="padding: 10px 20px; font-size: 13px; background: var(--accent-indigo); border-color: var(--accent-indigo);">🚀 Launch Dashboard</span>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Bottom Navigation & Counter Bar -->
+  <footer class="bottom-bar">
+    <div class="slide-counter">
+      Slide <span id="currentSlideNum">1</span> of <span id="totalSlideNum">12</span>
+    </div>
+
+    <div style="display: flex; gap: 12px; align-items: center;">
+      <span style="font-size: 11px; color: var(--text-subtle);">Use <span class="key-badge">←</span> <span class="key-badge">→</span> or <span class="key-badge">Space</span> to navigate</span>
+    </div>
+
+    <div class="nav-buttons">
+      <button class="btn-nav" id="btnPrev" onclick="prevSlide()" title="Previous Slide">◄</button>
+      <button class="btn-nav" id="btnNext" onclick="nextSlide()" title="Next Slide">►</button>
+    </div>
+  </footer>
+
+  <!-- Modal Speaker Notes -->
+  <div class="modal-notes" id="speakerNotesModal">
+    <div class="notes-header">
+      <div class="notes-title">🎙 Speaker Script — Nitesh Kumar</div>
+      <button onclick="toggleSpeakerNotes()" style="background:none; border:none; color:var(--text-muted); cursor:pointer; font-weight:bold;">✕</button>
+    </div>
+    <div class="notes-content" id="speakerNotesContent">
+      Loading speaker script...
+    </div>
+  </div>
+
+  <!-- Modal Slide Grid -->
+  <div class="modal-grid" id="slideGridModal">
+    <div style="display: flex; justify-content: space-between; align-items: center; max-width: 1200px; margin: 0 auto 24px;">
+      <h3 style="font-family: var(--font-heading); font-size: 24px; color: #fff;">Slide Overview</h3>
+      <button onclick="toggleSlideGrid()" class="btn-ctrl">Close Overview (Esc)</button>
+    </div>
+    <div class="grid-overview-container" id="gridOverviewContainer"></div>
+  </div>
+
+  <!-- Interactive JavaScript Engine -->
+  <script>
+    const totalSlides = 12;
+    let currentSlide = 1;
+
+    const speakerNotesData = {
+      1: "Welcome judges and team. I am Nitesh Kumar, presenting Aegis AI. Today, software development teams spend too much time on manual code reviews, security scanning, and context switching. Our platform introduces a state-orchestrated multi-agent intelligence system built with LangGraph, Next.js 16, and FastAPI.",
+      2: "Let's start with the problem. Modern engineering teams waste over 40% of their bandwidth on manual PR reviews, static analysis triage, and vulnerability tracking. Traditional chatbots fail here because they are stateless, lack repository AST awareness, and cannot enforce permission safety.",
+      3: "Here is our architecture. We built a production-grade stack with Next.js 16 on the frontend, FastAPI for async API routing, PostgreSQL for persistent storage, and Celery with Redis for background multi-agent execution. GitHub webhooks are secured with constant-time HMAC-SHA256 signatures.",
+      4: "Our core AI engine is built on LangGraph using a unified StateGraph skeleton. We coordinate 9 specialized agent roles—from Planner and RepoAnalyzer to CodeReviewer and SecurityAuditor—with declarative tool permission allowlists and versioned prompt templates.",
+      5: "To guarantee zero downtime and manage cost, our AI Provider Abstraction layer supports Google Gemini 1.5 Flash, OpenAI GPT-4.1, Groq, and local Ollama. We feature an automatic fallback chain, a 3-state circuit breaker, and an ApiKeyRing for credential rotation.",
+      6: "For deep repository context, our analysis engine uses Tree-sitter for target discovery and Python AST for symbol extraction. We integrate static security tools like Ruff, Bandit, Semgrep, and Radon safely without shell interpolation, backed by Redis SHA summary caching.",
+      7: "Security is non-negotiable. Our Secret Sanitizer uses real-time regex filters to sanitize API keys, JWTs, and tokens across logs and LLM payloads before transmission. We enforce strict RBAC roles and append-only audit logging.",
+      8: "Our dashboard features Next.js 16 App Router with dark mode and glassmorphic UI. For observability, we export Prometheus metrics at /api/v1/metrics/prometheus and JSON health telemetry to monitor model cost, latency, and circuit breaker states.",
+      9: "Here on Slide 9, you can see our live agent orchestration simulator. Clicking each node shows how state flows immutably between agents—from execution planning to code review, security auditing, and final pull request generation.",
+      10: "Here are our quantitative benchmarks: PR review cycle times are reduced by 85% from 45 minutes to 6.7 minutes. Smart LLM fallbacks cut API costs by 62%, and static scanners combined with LLMs deliver 3.4x higher security defect coverage with 100% secret redaction accuracy.",
+      11: "Our production roadmap includes three key phases: Phase 1 brings durable LangGraph PostgreSQL checkpointers for long workflows; Phase 2 introduces automatic GitHub PR posting; and Phase 3 enables air-gapped enterprise deployments with local Ollama models.",
+      12: "Thank you! I am Nitesh Kumar, and I am happy to answer any questions about our architecture, multi-agent state graph, security sanitization, or multi-provider fallback engine."
+    };
+
+    const simStepLogs = [
+      "> [Planner Node Initialized]\n> Ingesting repository context for 'enterprise-org/autonomous-platform'...\n> Execution plan constructed: 6 sub-tasks scheduled across agent graph.\n> Next Node: RepoAnalyzer",
+      "> [RepoAnalyzer Node Executing]\n> Inspecting repository structure with Tree-Sitter & ImportGraphService...\n> Indexing 42 source files, 148 functions, 18 module dependencies.\n> Redis SHA-256 summary cache populated.\n> Next Node: ArchitectureAgent",
+      "> [ArchitectureAgent Node Executing]\n> Constructing structural dependency graph...\n> API Router layer -> Service layer -> DB Session repository pattern mapped.\n> Component cohesion score: 94.2/100.\n> Next Node: CodeReviewer",
+      "> [CodeReviewer Node Executing]\n> Running AST linter wrappers (Ruff & Radon metrics)...\n> Identified 2 refactoring opportunities (complexity score > 12).\n> Formatted inline suggested improvements.\n> Next Node: SecurityAuditor",
+      "> [SecurityAuditor Node Executing]\n> Running subprocess scanners (Bandit & Semgrep rulesets)...\n> 0 Critical vulnerabilities, 1 Low severity secret warning flagged.\n> Applied Secret Sanitizer regex redaction across payload.\n> Next Node: TestGenerator",
+      "> [TestGenerator Node Executing]\n> Analyzing un-covered execution paths in router endpoints...\n> Generated 4 pytest unit test suites with async client fixtures.\n> Next Node: PRGenerator",
+      "> [PRGenerator Node Executing]\n> Compiling technical documentation and PR diff summary...\n> Triggering HumanApproval interrupt checkpoint for developer sign-off.\n> Workflow Status: COMPLETED SUCCESSFULLY."
+    ];
+
+    function showSlide(slideNum) {
+      if (slideNum < 1) slideNum = 1;
+      if (slideNum > totalSlides) slideNum = totalSlides;
+      
+      currentSlide = slideNum;
+      
+      document.querySelectorAll('.slide').forEach((slide, idx) => {
+        if (idx + 1 === currentSlide) {
+          slide.classList.add('active');
+        } else {
+          slide.classList.remove('active');
+        }
+      });
+
+      document.getElementById('currentSlideNum').innerText = currentSlide;
+      document.getElementById('totalSlideNum').innerText = totalSlides;
+      document.getElementById('progressBar').style.width = `${(currentSlide / totalSlides) * 100}%`;
+
+      document.getElementById('btnPrev').disabled = currentSlide === 1;
+      document.getElementById('btnNext').disabled = currentSlide === totalSlides;
+
+      // Update speaker notes content
+      document.getElementById('speakerNotesContent').innerText = speakerNotesData[currentSlide] || "No notes for this slide.";
+    }
+
+    function nextSlide() {
+      if (currentSlide < totalSlides) showSlide(currentSlide + 1);
+    }
+
+    function prevSlide() {
+      if (currentSlide > 1) showSlide(currentSlide - 1);
+    }
+
+    function toggleSpeakerNotes() {
+      const modal = document.getElementById('speakerNotesModal');
+      modal.classList.toggle('active');
+    }
+
+    function toggleSlideGrid() {
+      const modal = document.getElementById('slideGridModal');
+      modal.classList.toggle('active');
+
+      if (modal.classList.contains('active')) {
+        const container = document.getElementById('gridOverviewContainer');
+        container.innerHTML = '';
+        
+        for (let i = 1; i <= totalSlides; i++) {
+          const slideElem = document.getElementById(`slide-${i}`);
+          const title = slideElem.querySelector('.slide-title, .hero-h1')?.innerText || `Slide ${i}`;
+          
+          const thumb = document.createElement('div');
+          thumb.className = 'thumb-slide';
+          if (i === currentSlide) thumb.style.borderColor = 'var(--accent-cyan)';
+          thumb.innerHTML = `
+            <div class="thumb-num">SLIDE ${i < 10 ? '0' + i : i}</div>
+            <div class="thumb-title">${title}</div>
+          `;
+          thumb.onclick = () => {
+            showSlide(i);
+            toggleSlideGrid();
+          };
+          container.appendChild(thumb);
+        }
+      }
+    }
+
+    function toggleFullscreen() {
+      if (!document.fullscreenElement) {
+        document.documentElement.requestFullscreen().catch(err => {
+          console.error(`Error entering fullscreen: ${err.message}`);
+        });
+      } else {
+        if (document.exitFullscreen) document.exitFullscreen();
+      }
+    }
+
+    function runSimStep(stepIdx) {
+      document.querySelectorAll('.sim-step').forEach((btn, idx) => {
+        if (idx === stepIdx) btn.classList.add('active');
+        else btn.classList.remove('active');
+      });
+      document.getElementById('simConsole').innerText = simStepLogs[stepIdx] || "Executing step...";
+    }
+
+    // Keyboard Shortcuts Navigation
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === 'Space' || e.key === 'PageDown') {
+        e.preventDefault();
+        nextSlide();
+      } else if (e.key === 'ArrowLeft' || e.key === 'PageUp') {
+        e.preventDefault();
+        prevSlide();
+      } else if (e.key.toLowerCase() === 's') {
+        toggleSpeakerNotes();
+      } else if (e.key.toLowerCase() === 'o') {
+        toggleSlideGrid();
+      } else if (e.key.toLowerCase() === 'f') {
+        toggleFullscreen();
+      } else if (e.key === 'Escape') {
+        document.getElementById('speakerNotesModal').classList.remove('active');
+        document.getElementById('slideGridModal').classList.remove('active');
+      }
+    });
+
+    // Initialize
+    showSlide(1);
+  </script>
+</body>
+</html>

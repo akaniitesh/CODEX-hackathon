@@ -1,4 +1,4 @@
-# Enterprise Autonomous Software Engineering Platform: Installation Guide
+# Aegis AI: Installation Guide
 
 > **Target Audience**: This guide provides step-by-step instructions for installing, configuring, running, and troubleshooting the platform on a fresh Windows laptop (or macOS/Linux workstation), assuming zero prior familiarity with the codebase.
 
@@ -32,7 +32,7 @@
 
 # 1. Project Overview
 
-The **Autonomous Software Engineering Platform** is an enterprise-grade, state-orchestrated multi-agent platform designed to automate codebase understanding, architectural analysis, code reviews, static security audits, documentation generation, and Pull Request preparation.
+The **Aegis AI** platform is an enterprise-grade, state-orchestrated multi-agent platform designed to automate codebase understanding, architectural analysis, code reviews, static security audits, documentation generation, and Pull Request preparation.
 
 ### Architecture Components & How They Interact
 - **Frontend Dashboard (Next.js 16)**: Renders the web interface, repository grid, and real-time telemetry panels. Interacts with the backend via REST API (`/api/v1`) and WebSockets (`/api/v1/ws/connect`).

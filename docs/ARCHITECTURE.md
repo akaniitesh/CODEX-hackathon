@@ -1,6 +1,6 @@
-# Autonomous Software Engineering Platform: Architecture Documentation
+# Aegis AI: Architecture Documentation
 
-> **Target Audience**: This document provides an in-depth architectural blueprint of the Autonomous Software Engineering Platform. It is written for software architects, principal engineers, and system designers seeking a complete understanding of system components, data flow, safety boundaries, and scaling characteristics.
+> **Target Audience**: This document provides an in-depth architectural blueprint of the **Aegis AI** platform. It is written for software architects, principal engineers, and system designers seeking a complete understanding of system components, data flow, safety boundaries, and scaling characteristics.
 
 ---
 
@@ -24,7 +24,7 @@
 
 # 1. Overview
 
-The **Autonomous Software Engineering Platform** is an enterprise-grade, state-orchestrated multi-agent platform designed to automate codebase understanding, architectural analysis, code reviews, static security audits, documentation generation, and Pull Request preparation.
+The **Aegis AI** platform is an enterprise-grade, state-orchestrated multi-agent platform designed to automate codebase understanding, architectural analysis, code reviews, static security audits, documentation generation, and Pull Request preparation.
 
 ### Why Each Major Component Exists
 

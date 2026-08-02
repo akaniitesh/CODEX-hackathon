@@ -4,7 +4,7 @@ import { Repository } from '@/lib/types';
 interface RepoState {
   selectedRepo: Repository | null;
   isConnectModalOpen: boolean;
-  activeTab: 'repositories' | 'timeline' | 'graph' | 'reviews' | 'architecture' | 'analytics';
+  activeTab: 'repositories' | 'timeline' | 'graph' | 'reviews' | 'architecture' | 'analytics' | 'presentation';
   setSelectedRepo: (repo: Repository | null) => void;
   openConnectModal: () => void;
   closeConnectModal: () => void;

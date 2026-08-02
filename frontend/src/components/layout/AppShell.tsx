@@ -7,6 +7,7 @@ import { LoginModal } from '../auth/LoginModal';
 import { ConnectRepoModal } from '../auth/ConnectRepoModal';
 import { RepositoryList } from '../repositories/RepositoryList';
 import { AnalyticsPanel } from '../analytics/AnalyticsPanel';
+import { PresentationPanel } from '../presentation/PresentationPanel';
 
 export function AppShell({ children }: { children?: React.ReactNode }) {
   const { activeTab } = useRepoStore();
@@ -20,6 +21,8 @@ export function AppShell({ children }: { children?: React.ReactNode }) {
           <RepositoryList />
         ) : activeTab === 'analytics' ? (
           <AnalyticsPanel />
+        ) : activeTab === 'presentation' ? (
+          <PresentationPanel />
         ) : (
           children
         )}

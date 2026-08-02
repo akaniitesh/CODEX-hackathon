@@ -1,4 +1,4 @@
-# Autonomous Software Engineering Platform: API Reference
+# Aegis AI: API Reference
 
 > **API Version**: `v1`  
 > **Base Path**: `/api/v1`  
