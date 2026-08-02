@@ -76,7 +76,7 @@ The GitHub Actions workflow (`.github/workflows/ci-cd.yml`) enforces 6 mandatory
 ## 5. Frontend Production Deployment (Vercel)
 
 The Next.js frontend is deployed live on Vercel:
-- **Production Dashboard**: [https://frontend-six-hazel-69.vercel.app](https://frontend-six-hazel-69.vercel.app)
+- **Production Dashboard**: [https://aegisai-autonomous-sep.vercel.app](https://aegisai-autonomous-sep.vercel.app)
 - **Deployment URL**: [https://frontend-lgqd6yilk-akaniiteshs-projects.vercel.app](https://frontend-lgqd6yilk-akaniiteshs-projects.vercel.app)
 
 ### Local CLI Deployments

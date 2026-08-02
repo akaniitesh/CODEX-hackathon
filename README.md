@@ -520,7 +520,7 @@ cp frontend/.env.example frontend/.env
 docker-compose up --build -d
 ```
 Access points:
-- **Frontend Dashboard (Production)**: [https://frontend-six-hazel-69.vercel.app](https://frontend-six-hazel-69.vercel.app)
+- **Frontend Dashboard (Production)**: [https://aegisai-autonomous-sep.vercel.app](https://aegisai-autonomous-sep.vercel.app)
 - **Frontend Dashboard (Local)**: `http://localhost`
 - **Backend Health Check**: `http://localhost/api/v1/health`
 - **Prometheus Metrics**: `http://localhost/api/v1/metrics/prometheus`

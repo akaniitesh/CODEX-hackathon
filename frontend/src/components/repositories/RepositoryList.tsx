@@ -4,65 +4,19 @@ import React, { useState } from 'react';
 import { useRepoStore } from '@/store/useRepoStore';
 import { Repository } from '@/lib/types';
 import {
-  Activity,
-  Bot,
-  CheckCircle2,
   Clock,
   GitBranch,
   Play,
   Plus,
   Search,
-  ShieldCheck,
-  Zap,
+  Bot,
+  ExternalLink,
 } from 'lucide-react';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 
-const MOCK_REPOSITORIES: Repository[] = [
-  {
-    id: 'repo-demo-1',
-    organization_id: 'org-1',
-    github_repo_id: '992817',
-    owner: 'enterprise-org',
-    name: 'autonomous-platform',
-    full_name: 'enterprise-org/autonomous-platform',
-    clone_url: 'https://github.com/enterprise-org/autonomous-platform.git',
-    default_branch: 'main',
-    is_active: true,
-    created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'repo-demo-2',
-    organization_id: 'org-1',
-    github_repo_id: '883719',
-    owner: 'enterprise-org',
-    name: 'payments-microservice',
-    full_name: 'enterprise-org/payments-microservice',
-    clone_url: 'https://github.com/enterprise-org/payments-microservice.git',
-    default_branch: 'master',
-    is_active: true,
-    created_at: new Date(Date.now() - 86400000 * 12).toISOString(),
-    updated_at: new Date(Date.now() - 3600000 * 4).toISOString(),
-  },
-  {
-    id: 'repo-demo-3',
-    organization_id: 'org-1',
-    github_repo_id: '772615',
-    owner: 'enterprise-org',
-    name: 'auth-rbac-service',
-    full_name: 'enterprise-org/auth-rbac-service',
-    clone_url: 'https://github.com/enterprise-org/auth-rbac-service.git',
-    default_branch: 'main',
-    is_active: true,
-    created_at: new Date(Date.now() - 86400000 * 30).toISOString(),
-    updated_at: new Date(Date.now() - 86400000).toISOString(),
-  },
-];
-
 export function RepositoryList() {
-  const { selectedRepo, setSelectedRepo, openConnectModal, setActiveTab } = useRepoStore();
+  const { repositories, selectedRepo, setSelectedRepo, openConnectModal, setActiveTab } = useRepoStore();
   const [search, setSearch] = useState('');
-  const [repositories] = useState<Repository[]>(MOCK_REPOSITORIES);
 
   const filtered = repositories.filter(
     (repo) =>
@@ -94,7 +48,7 @@ export function RepositoryList() {
               placeholder="Search repositories..."
               value={search}
               onChange={(e) => setSearch(e.target.value)}
-              className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900/90 border border-white/10 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500"
+              className="w-full pl-9 pr-4 py-2 rounded-xl bg-slate-900 border border-white/10 text-xs text-slate-200 placeholder-slate-500 focus:outline-none focus:border-indigo-500 font-mono transition-all"
             />
           </div>
 
@@ -129,8 +83,17 @@ export function RepositoryList() {
                   </div>
                   <div>
                     <span className="text-[10px] font-mono text-slate-400 uppercase tracking-wider">{repo.owner}</span>
-                    <h3 className="text-sm font-bold text-white tracking-tight group-hover:text-indigo-300 transition-colors">
-                      {repo.name}
+                    <h3 className="text-sm font-bold text-white tracking-tight group-hover:text-indigo-300 transition-colors flex items-center gap-1.5">
+                      <span>{repo.name}</span>
+                      <a
+                        href={`https://github.com/${repo.owner}/${repo.name}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-slate-500 hover:text-indigo-400 transition-colors"
+                      >
+                        <ExternalLink className="h-3 w-3" />
+                      </a>
                     </h3>
                   </div>
                 </div>
@@ -150,13 +113,13 @@ export function RepositoryList() {
                   </span>
                   <span className="flex items-center gap-1">
                     <Clock className="h-3.5 w-3.5 text-slate-500" />
-                    Indexed 2h ago
+                    Indexed
                   </span>
                 </div>
 
-                <div className="flex items-center justify-between text-[11px] text-slate-400">
-                  <span>AST Symbols: 142</span>
-                  <span>Safety Scans: Clean</span>
+                <div className="flex items-center justify-between text-[11px] text-slate-400 font-mono">
+                  <span>ID: #{repo.github_repo_id}</span>
+                  <span className="text-emerald-400">AST Verified</span>
                 </div>
               </div>
 
@@ -170,7 +133,7 @@ export function RepositoryList() {
                   className="flex-1 flex items-center justify-center gap-2 py-2 px-3 rounded-xl bg-indigo-600 hover:bg-indigo-500 text-white text-xs font-semibold shadow-md shadow-indigo-600/20 transition-all cursor-pointer"
                 >
                   <Play className="h-3.5 w-3.5 fill-current" />
-                  <span>Launch Run</span>
+                  <span>Launch Agent Run</span>
                 </button>
 
                 <button
@@ -179,7 +142,7 @@ export function RepositoryList() {
                     setSelectedRepo(repo);
                     setActiveTab('graph');
                   }}
-                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors"
+                  className="p-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-slate-300 hover:text-white transition-colors cursor-pointer"
                   title="View LangGraph Execution Shape"
                 >
                   <Bot className="h-4 w-4" />
