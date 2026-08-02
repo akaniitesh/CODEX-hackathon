@@ -39,7 +39,6 @@ export function Navbar() {
     <>
       <header className="sticky top-0 z-40 w-full glass-panel border-b border-white/10 px-4 lg:px-8 py-3 backdrop-blur-xl">
         <div className="flex items-center justify-between gap-4">
-          {/* Brand & Repository Selector */}
           <div className="flex items-center gap-6">
             <div className="flex items-center gap-3 cursor-pointer" onClick={() => setActiveTab('repositories')}>
               <div className="h-9 w-9 rounded-xl bg-gradient-to-tr from-indigo-600 via-emerald-500 to-cyan-400 p-[1px] shadow-lg shadow-indigo-500/20">
@@ -57,7 +56,6 @@ export function Navbar() {
               </div>
             </div>
 
-            {/* Selected Repo Badge */}
             {selectedRepo && (
               <div className="hidden md:flex items-center gap-2 px-3 py-1.5 rounded-lg bg-slate-900/80 border border-white/10 text-xs text-slate-300 shadow-inner">
                 <GitBranch className="h-3.5 w-3.5 text-indigo-400" />
@@ -68,7 +66,6 @@ export function Navbar() {
             )}
           </div>
 
-          {/* Navigation Tabs */}
           <nav className="hidden xl:flex items-center gap-1 bg-slate-900/80 p-1 rounded-xl border border-white/5">
             {navItems.map((item) => {
               const Icon = item.icon;
@@ -90,9 +87,7 @@ export function Navbar() {
             })}
           </nav>
 
-          {/* Right Actions & Profile */}
           <div className="flex items-center gap-2 sm:gap-3">
-            {/* AI Provider Keys Button */}
             <button
               onClick={() => setIsKeyModalOpen(true)}
               className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg bg-slate-900 hover:bg-slate-800 border border-indigo-500/30 text-indigo-300 hover:text-white text-xs font-medium transition-all cursor-pointer"

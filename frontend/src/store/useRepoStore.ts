@@ -1,46 +1,34 @@
 import { create } from 'zustand';
 import { Repository } from '@/lib/types';
 
-const DEFAULT_REPOS: Repository[] = [
-  {
-    id: 'repo-1',
-    organization_id: 'org-1',
-    github_repo_id: '992817',
-    owner: 'akaniitesh',
-    name: 'CODEX-hackathon',
-    full_name: 'akaniitesh/CODEX-hackathon',
-    clone_url: 'https://github.com/akaniitesh/CODEX-hackathon.git',
-    default_branch: 'main',
-    is_active: true,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-  {
-    id: 'repo-2',
-    organization_id: 'org-1',
-    github_repo_id: '883719',
-    owner: 'enterprise-org',
-    name: 'aegis-ai-engine',
-    full_name: 'enterprise-org/aegis-ai-engine',
-    clone_url: 'https://github.com/enterprise-org/aegis-ai-engine.git',
-    default_branch: 'main',
-    is_active: true,
-    created_at: new Date(Date.now() - 86400000 * 5).toISOString(),
-    updated_at: new Date().toISOString(),
-  },
-];
+const INITIAL_USER_REPO: Repository = {
+  id: 'repo-1',
+  organization_id: 'org-1',
+  github_repo_id: '1314878652',
+  owner: 'akaniitesh',
+  name: 'CODEX-hackathon',
+  full_name: 'akaniitesh/CODEX-hackathon',
+  clone_url: 'https://github.com/akaniitesh/CODEX-hackathon.git',
+  default_branch: 'main',
+  is_active: true,
+  created_at: new Date().toISOString(),
+  updated_at: new Date().toISOString(),
+};
 
 const getInitialRepos = (): Repository[] => {
-  if (typeof window === 'undefined') return DEFAULT_REPOS;
+  if (typeof window === 'undefined') return [INITIAL_USER_REPO];
   const stored = localStorage.getItem('user_repos');
   if (stored) {
     try {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored);
+      if (Array.isArray(parsed) && parsed.length > 0) {
+        return parsed;
+      }
     } catch {
       // Fallback
     }
   }
-  return DEFAULT_REPOS;
+  return [INITIAL_USER_REPO];
 };
 
 interface RepoState {
@@ -50,6 +38,7 @@ interface RepoState {
   activeTab: 'repositories' | 'timeline' | 'graph' | 'reviews' | 'architecture' | 'analytics' | 'presentation';
   setSelectedRepo: (repo: Repository | null) => void;
   addRepository: (repo: Repository) => void;
+  deleteRepository: (id: string) => void;
   openConnectModal: () => void;
   closeConnectModal: () => void;
   setActiveTab: (tab: RepoState['activeTab']) => void;
@@ -67,6 +56,14 @@ export const useRepoStore = create<RepoState>((set, get) => ({
       localStorage.setItem('user_repos', JSON.stringify(updated));
     }
     set({ repositories: updated, selectedRepo: repo });
+  },
+  deleteRepository: (id) => {
+    const updated = get().repositories.filter((r) => r.id !== id);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem('user_repos', JSON.stringify(updated));
+    }
+    const nextSelected = get().selectedRepo?.id === id ? (updated[0] || null) : get().selectedRepo;
+    set({ repositories: updated, selectedRepo: nextSelected });
   },
   openConnectModal: () => set({ isConnectModalOpen: true }),
   closeConnectModal: () => set({ isConnectModalOpen: false }),

@@ -103,7 +103,6 @@ export function ProviderKeyModal({
         </div>
 
         <form onSubmit={handleSave} className="space-y-5">
-          {/* Active Provider Selector */}
           <div>
             <label className="block text-xs font-semibold text-slate-300 mb-2 flex items-center gap-1.5">
               <Sparkles className="h-3.5 w-3.5 text-amber-400" />
@@ -131,7 +130,6 @@ export function ProviderKeyModal({
             </div>
           </div>
 
-          {/* Key Inputs */}
           <div className="space-y-3 pt-2">
             <div>
               <label className="block text-xs font-medium text-slate-400 mb-1">Google Gemini API Key</label>
@@ -245,7 +243,6 @@ export function ProviderKeyModal({
             </div>
           </div>
 
-          {/* Security Banner */}
           <div className="flex items-center gap-2 text-slate-400 text-[11px] bg-slate-900/60 p-2.5 rounded-xl border border-white/5">
             <ShieldCheck className="h-4 w-4 text-emerald-400 flex-shrink-0" />
             <span>Keys are stored in local browser session storage and never transmitted to shared servers.</span>

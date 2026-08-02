@@ -35,7 +35,7 @@ export function LoginModal() {
         return;
       }
     } catch {
-      // Backend OAuth fallback
+      // Fallback
     }
 
     const redirectUri = typeof window !== 'undefined' ? `${window.location.origin}/auth/github/callback` : '';
@@ -70,7 +70,6 @@ export function LoginModal() {
       className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-950/85 backdrop-blur-md animate-fade-in"
     >
       <div className="relative w-full max-w-md glass-panel rounded-2xl p-6 border border-white/10 shadow-2xl space-y-6">
-        {/* Close Button */}
         <button
           onClick={closeLoginModal}
           className="absolute top-4 right-4 p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition-all cursor-pointer"
@@ -78,7 +77,6 @@ export function LoginModal() {
           <X className="h-4 w-4" />
         </button>
 
-        {/* Icon Header */}
         <div className="flex flex-col items-center text-center space-y-3">
           <div className="h-12 w-12 rounded-2xl bg-indigo-600/20 border border-indigo-500/30 flex items-center justify-center shadow-lg shadow-indigo-500/10">
             <Bot className="h-6 w-6 text-indigo-400" />
@@ -93,7 +91,6 @@ export function LoginModal() {
           </div>
         </div>
 
-        {/* Tab Switcher */}
         <div className="flex p-1 bg-slate-900/80 rounded-xl border border-white/5 text-xs font-semibold">
           <button
             onClick={() => { setActiveTab('token'); clearError(); setOauthError(null); }}
@@ -113,7 +110,6 @@ export function LoginModal() {
           </button>
         </div>
 
-        {/* Error Alert */}
         {(error || oauthError) && (
           <div className="p-3 rounded-xl bg-rose-500/10 border border-rose-500/20 text-rose-300 text-xs flex items-center gap-2">
             <AlertCircle className="h-4 w-4 text-rose-400 flex-shrink-0" />
@@ -121,7 +117,6 @@ export function LoginModal() {
           </div>
         )}
 
-        {/* Tab Content */}
         {activeTab === 'token' ? (
           <form onSubmit={handlePatSubmit} className="space-y-4">
             <div>
@@ -200,7 +195,6 @@ export function LoginModal() {
           </div>
         )}
 
-        {/* Security Assurance */}
         <div className="flex items-center gap-2 text-slate-400 text-[11px] justify-center bg-slate-900/60 p-2.5 rounded-xl border border-white/5">
           <ShieldCheck className="h-4 w-4 text-emerald-400 flex-shrink-0" />
           <span>Strict RBAC protection &amp; zero secret storage in LLM context windows.</span>

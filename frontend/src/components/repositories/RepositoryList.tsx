@@ -11,11 +11,12 @@ import {
   Search,
   Bot,
   ExternalLink,
+  Trash2,
 } from 'lucide-react';
 import { GithubIcon } from '@/components/icons/GithubIcon';
 
 export function RepositoryList() {
-  const { repositories, selectedRepo, setSelectedRepo, openConnectModal, setActiveTab } = useRepoStore();
+  const { repositories, selectedRepo, setSelectedRepo, deleteRepository, openConnectModal, setActiveTab } = useRepoStore();
   const [search, setSearch] = useState('');
 
   const filtered = repositories.filter(
@@ -98,10 +99,22 @@ export function RepositoryList() {
                   </div>
                 </div>
 
-                <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
-                  <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
-                  Active
-                </span>
+                <div className="flex items-center gap-2">
+                  <span className="flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 text-[10px] font-mono">
+                    <span className="h-1.5 w-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                    Active
+                  </span>
+                  <button
+                    onClick={(e) => {
+                      e.stopPropagation();
+                      deleteRepository(repo.id);
+                    }}
+                    className="p-1 text-slate-500 hover:text-rose-400 transition-colors cursor-pointer"
+                    title="Disconnect Repository"
+                  >
+                    <Trash2 className="h-3.5 w-3.5" />
+                  </button>
+                </div>
               </div>
 
               {/* Repo Details */}
