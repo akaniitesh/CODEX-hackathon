@@ -105,11 +105,23 @@ class Settings(BaseSettings):
     def initialize_api_keys(self) -> Settings:
         """Initialize plural api key lists from singular variables if empty."""
         if not self.openai_api_keys and self.openai_api_key:
-            self.openai_api_keys = [item.strip() for item in self.openai_api_key.split(",") if item.strip()]
+            self.openai_api_keys = [
+                item.strip()
+                for item in self.openai_api_key.split(",")
+                if item.strip()
+            ]
         if not self.groq_api_keys and self.groq_api_key:
-            self.groq_api_keys = [item.strip() for item in self.groq_api_key.split(",") if item.strip()]
+            self.groq_api_keys = [
+                item.strip()
+                for item in self.groq_api_key.split(",")
+                if item.strip()
+            ]
         if not self.gemini_api_keys and self.google_api_key:
-            self.gemini_api_keys = [item.strip() for item in self.google_api_key.split(",") if item.strip()]
+            self.gemini_api_keys = [
+                item.strip()
+                for item in self.google_api_key.split(",")
+                if item.strip()
+            ]
         return self
 
     @model_validator(mode="after")
