@@ -15,6 +15,9 @@ class BaseAIProvider(ABC):
 
     name: ProviderName
 
+    def __init__(self, name: ProviderName) -> None:
+        self.name = name
+
     @abstractmethod
     async def generate(self, request: AIRequest) -> AIResponse:
         """Generate a complete model response."""
