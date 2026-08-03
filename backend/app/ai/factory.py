@@ -18,10 +18,19 @@ from app.ai.schemas import ProviderName
 from app.core.config import Settings, settings
 
 
-def create_provider(config: Settings = settings) -> BaseAIProvider:
-    """Create the active provider selected by AI_PROVIDER."""
-    provider_name = ProviderName(config.ai_provider.lower())
-    providers = _provider_map(config)
+def create_provider(
+    config: Settings = settings,
+    provider_override: str | None = None,
+    model_override: str | None = None,
+) -> BaseAIProvider:
+    """Create the active provider selected by user preference or AI_PROVIDER config."""
+    p_name = (provider_override or config.ai_provider).lower()
+    try:
+        provider_name = ProviderName(p_name)
+    except ValueError:
+        provider_name = ProviderName.GEMINI
+
+    providers = _provider_map(config, custom_model=model_override)
     return providers[provider_name]
 
 
@@ -68,12 +77,12 @@ def create_fallback_provider(
     )
 
 
-def _provider_map(config: Settings) -> dict[ProviderName, BaseAIProvider]:
-    """Build all configured concrete providers."""
+def _provider_map(config: Settings, custom_model: str | None = None) -> dict[ProviderName, BaseAIProvider]:
+    """Build all configured concrete providers with optional user model override."""
     gemini_keys = config.gemini_api_keys or (
         [config.google_api_key] if config.google_api_key else []
     )
-    gemini_model = config.gemini_model or config.model_name
+    gemini_model = custom_model or config.gemini_model or config.model_name
     anthropic_keys = config.anthropic_api_keys or (
         [config.anthropic_api_key] if config.anthropic_api_key else []
     )
@@ -88,26 +97,26 @@ def _provider_map(config: Settings) -> dict[ProviderName, BaseAIProvider]:
         ),
         ProviderName.GROQ: GroqProvider(
             api_keys=config.groq_api_keys,
-            model=config.groq_model,
+            model=custom_model or config.groq_model,
             base_url=config.groq_base_url,
         ),
         ProviderName.OPENAI: OpenAIProvider(
             api_keys=config.openai_api_keys,
-            model=config.openai_model,
+            model=custom_model or config.openai_model,
             base_url=config.openai_base_url,
         ),
         ProviderName.ANTHROPIC: AnthropicProvider(
             api_keys=anthropic_keys,
-            model=config.anthropic_model,
+            model=custom_model or config.anthropic_model,
             base_url=config.anthropic_base_url,
         ),
         ProviderName.OPENROUTER: OpenRouterProvider(
             api_keys=openrouter_keys,
-            model=config.openrouter_model,
+            model=custom_model or config.openrouter_model,
             base_url=config.openrouter_base_url,
         ),
         ProviderName.OLLAMA: OllamaProvider(
-            model=config.ollama_model,
+            model=custom_model or config.ollama_model,
             base_url=config.ollama_base_url,
         ),
     }

@@ -95,10 +95,11 @@ graph TD
 - **Versioned Prompt Registry**: Central prompt template engine (`PromptRegistry`) loading versioned text prompts (`planner_v1`, `repo_analyzer_v1`) with variable validation. Zero hardcoded prompt strings.
 - **Declarative Tool Permissions**: Central `ToolPermissionManager` enforcing agent-to-tool allowlists. Unauthorized tool calls raise HTTP 403 `ToolPermissionDeniedError`.
 
-### AI Provider Abstraction
+### AI Provider Abstraction & User Model Selection
+- **User Freedom of Choice**: Full support for users to pick their own preferred LLM provider & model of choice (Google Gemini, OpenAI GPT-4.1 / GPT-4o, Anthropic Claude 3.5 Sonnet, Groq Llama 3.1, OpenRouter / DeepSeek, or Local Ollama).
 - **Multi-Provider Unified Interface**: `BaseAIProvider` abstraction with `HttpChatProvider` handling synchronous, streaming, and Pydantic structured output.
-- **Dynamic Factory**: Switch LLM providers via `AI_PROVIDER` (`gemini`, `openai`, `groq`, `ollama`) without code changes.
-- **Resilient Fallback Chain**: Automatic failover sequence: **Gemini → OpenAI → Groq → Ollama → Retry Queue**.
+- **Dynamic User Key & Model Overrides**: Respects user-configured API keys and selected model choices per request.
+- **Resilient Fallback Chain**: Automatic failover sequence: **User Choice → Backup Provider → Ollama → Retry Queue**.
 - **Circuit Breaker State Machine**: In-memory 3-state breaker (`CLOSED`, `OPEN`, `HALF_OPEN`) tracking failure thresholds and cooldown probes per provider.
 - **API Key Rotation**: Round-robin `ApiKeyRing` cycling through multiple provider credentials.
 - **Token Budget Accounting**: Per-run and per-user token and USD cost accounting with automatic limit tripping.

@@ -100,23 +100,24 @@ This document serves as the complete presentation deck and speaker guide for **N
 
 ---
 
-### Slide 5: Multi-Provider AI Abstraction Layer
+### Slide 5: User-Selectable Multi-Provider AI Architecture
 - **Target Time:** 1:15
-- **Slide Title:** Multi-Provider AI Abstraction & Fallbacks
-- **Subtitle:** Universal AI provider factory with circuit breakers and API key rotation
+- **Slide Title:** User-Selectable Multi-Provider AI Architecture
+- **Subtitle:** Complete freedom for users to choose their preferred LLM provider & model with circuit breakers and key rotation
 - **Highlights:**
-  - **Universal Interface**: `BaseAIProvider` supporting Google Gemini 1.5 Flash, OpenAI GPT-4.1, Groq Llama 3.1, and local Ollama.
-  - **Resilient Fallback Chain**: `Gemini → OpenAI → Groq → Ollama → Retry Queue`.
+  - **User Freedom of Choice**: Users select their model of choice—Google Gemini, OpenAI GPT-4.1, Anthropic Claude 3.5, Groq Llama 3.1, OpenRouter / DeepSeek, or Local Ollama.
+  - **Universal Interface**: Unified `BaseAIProvider` handling dynamic user model & key overrides seamlessly.
+  - **Resilient Fallback Chain**: User Preference ➔ Backup Provider ➔ Ollama ➔ Retry Queue.
   - **3-State Circuit Breaker**: `CLOSED` (Healthy), `OPEN` (Failed), `HALF_OPEN` (Probing).
   - **ApiKeyRing**: Round-robin API key rotation per provider.
   - **Cost Accounting**: Real-time token consumption tracking and soft/hard USD cost budget limits.
 
 #### 🎙 Speaker Script (Nitesh Kumar):
-> *"Reliability and cloud cost control are paramount for enterprise software. Our **Multi-Provider AI Abstraction Layer** solves vendor lock-in and API outage risks.*
+> *"Flexibility and model sovereignty are paramount for modern development teams. Aegis AI gives users complete freedom to **choose their own LLM provider and model of choice**—whether it's Google Gemini 3.5 Flash, OpenAI GPT-4o, Anthropic Claude 3.5 Sonnet, Groq Llama 3.1, OpenRouter DeepSeek, or a self-hosted local Ollama model.*
 > 
-> *We implemented a dynamic provider factory defaulting to **Google Gemini 1.5 Flash** for optimal speed and cost efficiency. If Gemini experiences a rate limit or outage, our automatic fallback chain seamlessly switches to **OpenAI**, then **Groq**, then **local Ollama**.*
+> *Our dynamic provider factory instantly respects the user's selected model and API keys. If a primary provider hits rate limits or an outage, our automatic fallback chain smoothly shifts to backup providers without breaking execution.*
 > 
-> *Each provider is monitored by a **3-State Circuit Breaker** (`CLOSED`, `OPEN`, `HALF_OPEN`) to prevent cascading timeouts. Additionally, our `ApiKeyRing` cycles credentials round-robin, and our cost accounting module tracks USD spend per run to prevent unexpected bills."*
+> *Each provider is monitored by a 3-State Circuit Breaker (`CLOSED`, `OPEN`, `HALF_OPEN`), and our ApiKeyRing cycles credentials round-robin while token budget accounting tracks spend per run."*
 
 ---
 

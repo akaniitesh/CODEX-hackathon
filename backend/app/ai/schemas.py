@@ -28,6 +28,7 @@ class AIRequest(BaseModel):
     """Provider-agnostic generation request."""
 
     messages: list[AIMessage]
+    provider: ProviderName | str | None = None
     model: str | None = None
     temperature: float = Field(default=0.2, ge=0.0, le=2.0)
     max_tokens: int = Field(default=1_024, ge=1, le=128_000)
